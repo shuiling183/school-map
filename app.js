@@ -1,6 +1,19 @@
 // ===== 上海初中分布地图 - 纯静态版 v2 =====
 const PASSWORD = 'shanghai2026';
+const AMAP_KEY = '6118f1fa8820ad41e2fbb6d9c2b5e3b7';
 let map, geocoder, markers = [], favIds = new Set(), hiddenIds = new Set(), showFavOnly = false, currentSchool = null;
+let amapLoaded = false;
+
+// 动态加载高德地图
+function loadAMap(callback) {
+  if (amapLoaded) { callback(); return; }
+  if (window.AMap) { amapLoaded = true; callback(); return; }
+  const script = document.createElement('script');
+  script.src = 'https://webapi.amap.com/maps?v=2.0&key=' + AMAP_KEY + '&plugin=AMap.Geocoder';
+  script.onload = function() { amapLoaded = true; callback(); };
+  script.onerror = function() { alert('高德地图加载失败，请检查网络或刷新重试'); };
+  document.head.appendChild(script);
+}
 
 // ===== 登录 =====
 function doLogin() {
@@ -8,13 +21,13 @@ function doLogin() {
     localStorage.setItem('auth_school_map', 'true');
     document.getElementById('loginPage').style.display = 'none';
     document.getElementById('mapPage').style.display = 'block';
-    initMap();
+    loadAMap(initMap);
   } else { document.getElementById('loginError').style.display = 'block'; }
 }
 if (localStorage.getItem('auth_school_map') === 'true') {
   document.getElementById('loginPage').style.display = 'none';
   document.getElementById('mapPage').style.display = 'block';
-  window.addEventListener('load', initMap);
+  window.addEventListener('load', function() { loadAMap(initMap); });
 }
 
 // ===== 初始化 =====
