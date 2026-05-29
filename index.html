@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>上海初中学校分布地图</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- 登录页面 -->
+<div id="loginPage">
+  <div class="login-box">
+    <h1>🏫 上海初中学校分布地图</h1>
+    <p style="color:#aaa;">请输入访问密码</p>
+    <input type="password" id="pwdInput" placeholder="输入密码..." autofocus onkeydown="if(event.key==='Enter')doLogin()">
+    <button onclick="doLogin()">进入地图</button>
+    <p id="loginError" style="color:#e94560;display:none;margin-top:10px;">密码错误</p>
+    <p style="color:#666;font-size:12px;margin-top:20px;">默认密码: shanghai2026</p>
+  </div>
+</div>
+
+<!-- 地图页面 -->
+<div id="mapPage" style="display:none;">
+  <div id="topBar">
+    <span class="logo">🏫 上海初中分布地图 <span style="font-size:11px;color:#aaa;">(高德)</span></span>
+    <div class="toolbar-right">
+      <select id="districtFilter"><option value="">全部区域</option></select>
+      <select id="tierFilter"><option value="">全部梯队</option><option value="一梯队">一梯队</option><option value="二梯队">二梯队</option><option value="三梯队">三梯队</option></select>
+      <select id="typeFilter"><option value="">全部</option><option value="公办">公办</option><option value="民办">民办</option></select>
+      <input type="text" id="searchInput" placeholder="搜索学校..." style="width:120px;">
+      <button onclick="toggleFav()" id="favBtn">⭐ 只看收藏</button>
+      <button onclick="exportFav()" style="background:#2ecc71;color:#fff;border:none;padding:6px 10px;border-radius:4px;cursor:pointer;font-size:12px;">📥 导出</button>
+    </div>
+  </div>
+  <div id="mapContainer"></div>
+  <div id="detailPanel" style="display:none;"><div id="detailContent"></div></div>
+  <div id="infoBar">
+    <span id="schoolCount"></span>
+    <span style="margin-left:15px;"><span class="dot red"></span>一梯队 <span class="dot orange"></span>二梯队 <span class="dot blue"></span>三梯队 <span class="dot gray"></span>其他</span>
+  </div>
+</div>
+
+<script>
+// 高德地图Key (免费申请: https://lbs.amap.com/)
+var AMAP_KEY = '6118f1fa8820ad41e2fbb6d9c2b5e3b7';
+</script>
+<script src="https://webapi.amap.com/maps?v=2.0&key=6118f1fa8820ad41e2fbb6d9c2b5e3b7&plugin=AMap.Geocoder"></script>
+<script src="schools_data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
