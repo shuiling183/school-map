@@ -74,29 +74,18 @@ function renderMap() {
   if(type) filtered=filtered.filter(s=>(s.type||'').includes(type));
   if(search) filtered=filtered.filter(s=>(s.name||'').toLowerCase().includes(search)||(s.fullName||'').toLowerCase().includes(search));
   if(showFavOnly) filtered=filtered.filter(s=>favIds.has(s.id));
-  // hidden schools are still shown but grayed out (unless "只看收藏" is on)
 
-  let done=0;
+  // Use district centers with offsets for all markers (reliable, no API calls needed)
   filtered.forEach(school=>{
-    if(school.address){
-      geocoder.getLocation(school.address,(status,result)=>{
-        done++;
-        if(status==='complete'&&result.geocodes.length>0){
-          addMarker(school,result.geocodes[0].location.lng,result.geocodes[0].location.lat);
-        }else{
-          const c=getCenter(school.district);
-          if(c) addMarker(school,c[0]+Math.sin(school.id*12.7)*0.015,c[1]+Math.cos(school.id*7.3)*0.015);
-        }
-        if(done>=filtered.length) updateCount();
-      });
-    }else{
-      done++;
-      const c=getCenter(school.district);
-      if(c) addMarker(school,c[0]+Math.sin(school.id*12.7)*0.015,c[1]+Math.cos(school.id*7.3)*0.015);
-      if(done>=filtered.length) updateCount();
+    const c=getCenter(school.district);
+    if(c){
+      // Spread schools within their district using pseudo-random but consistent offsets
+      const offsetLng=Math.sin(school.id*12.7+1.3)*0.025;
+      const offsetLat=Math.cos(school.id*7.3+2.1)*0.025;
+      addMarker(school,c[0]+offsetLng,c[1]+offsetLat);
     }
   });
-  if(filtered.length===0) updateCount();
+  updateCount();
 }
 
 function updateCount() {
