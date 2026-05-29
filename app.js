@@ -39,33 +39,52 @@ function populateFilters(){
   document.getElementById('searchInput').oninput=doRender;
 }
 
-// ====== 后台地理编码 ======
+// ====== 后台地理编码（带可视化进度）=====
+var geoCodingActive=false,geoTotal=0,geoDone=0;
 function startGeocoding(){
-  var cache=getGeoCache(),geocoder=new AMap.Geocoder({city:'上海'});
+  if(geoCodingActive) return;
+  var cache=getGeoCache();
   var todo=ALL_SCHOOLS.filter(function(s){return s.address&&s.address!==''&&!cache[s.id];});
   if(todo.length===0){updateStatus();return;}
-  var i=0,count=0,statusEl=document.getElementById('schoolCount');
+  geoCodingActive=true;geoTotal=todo.length;geoDone=0;
+  document.getElementById('schoolCount').innerHTML='📍 正在精确定位 <b>0/'+geoTotal+'</b> 所学校...';
+  // 检查Geocoder是否可用
+  if(typeof AMap==='undefined'||!AMap.Geocoder){document.getElementById('schoolCount').textContent='⚠ Geocoder未加载，使用近似坐标';geoCodingActive=false;return;}
+  var geocoder=new AMap.Geocoder({city:'上海'}),i=0,count=0;
   function next(){
-    if(i>=todo.length){setGeoCache(cache);updateStatus();doRender();return;}
-    var school=todo[i];
-    geocoder.getLocation(school.address,function(status,result){
+    if(i>=todo.length){setGeoCache(cache);geoCodingActive=false;updateStatus();doRender();console.log('Geocoding done:',count,'/',todo.length);return;}
+    var school=todo[i],addr=school.address;
+    geocoder.getLocation(addr,function(status,result){
+      i++;
       if(status==='complete'&&result.geocodes&&result.geocodes.length>0){
         var loc=result.geocodes[0].location;cache[school.id]={lng:loc.lng,lat:loc.lat};count++;
-      }i++;
-      if(i%15===0){statusEl.textContent='📍 定位中... '+i+'/'+todo.length;setGeoCache(cache);doRender();}
-      setTimeout(next,80);
+      }
+      geoDone=i;
+      // 每10个更新一次进度和地图
+      if(i%10===0||i>=todo.length){
+        document.getElementById('schoolCount').innerHTML='📍 精确定位中 <b>'+i+'/'+geoTotal+'</b>（已成功'+count+'）';
+        setGeoCache(cache);doRender();
+      }
+      setTimeout(next,120);
     });
-  }next();
+  }
+  next();
 }
 function updateStatus(){document.getElementById('schoolCount').textContent='共 '+ALL_SCHOOLS.length+' 所学校';}
 
 // ====== 搜索 ======
 function matchSearch(school,keyword){
   if(!keyword) return true;
-  var k=keyword.toLowerCase(),aliases={'上实西校':'实验西校','华师大二附校':'闵华二','骏博外国语':'骏博','圣华紫竹':'华二紫竹','民办欣竹':'新竹园','浦华曜':'华曜浦东','建平地杰':'建实地杰','兰生复旦':'兰生','存志学校':'存志','新华初级':'新华初','迅行初级':'迅行','五浦汇实验':'五浦汇','宝山华曜':'华曜宝山','华曜初级':'华曜嘉定','九峰实验':'九峰'};
-  if(aliases[school.name]&&aliases[school.name].toLowerCase().indexOf(k)>=0) return true;
-  var fields=[school.name,school.fullName,school.district,school.highlights,getSchoolData(school).tier];
+  var k=keyword.toLowerCase();
+  // 别名双向映射
+  var aliases={'上实西校':['实验西校','上海实验西校'],'华师大二附校':['闵华二','华二附初'],'骏博外国语':['骏博'],'圣华紫竹':['华二紫竹'],'民办欣竹':['新竹园'],'浦华曜':['华曜浦东'],'建平地杰':['建实地杰'],'兰生复旦':['兰生'],'存志学校':['存志'],'新华初级':['新华初'],'迅行初级':['迅行'],'五浦汇实验':['五浦汇'],'宝山华曜':['华曜宝山'],'华曜初级':['华曜嘉定'],'九峰实验':['九峰'],'民办克勒':['克勒'],'新复兴':['新复兴初级'],'新北郊':['新北郊初级'],'上外双语':['杨浦双语']};
+  // 检查别名
+  if(aliases[school.name]){for(var a=0;a<aliases[school.name].length;a++){if(aliases[school.name][a].toLowerCase().indexOf(k)>=0) return true;}}
+  // 主字段搜索（任意字段包含关键词即可）
+  var fields=[school.name,school.fullName,school.district,school.highlights,getSchoolData(school).tier,school.address];
   for(var i=0;i<fields.length;i++){if((fields[i]||'').toLowerCase().indexOf(k)>=0) return true;}
+  // 反向匹配：关键词包含在某个字段中
+  for(var i=0;i<fields.length;i++){var f=(fields[i]||'').toLowerCase();if(f&&k.indexOf(f)>=0) return true;}
   return false;
 }
 
