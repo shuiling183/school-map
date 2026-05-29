@@ -1,6 +1,7 @@
 // ===== 上海初中分布地图 - 纯静态版 v2 =====
 const PASSWORD = 'shanghai2026';
-const AMAP_KEY = '6118f1fa8820ad41e2fbb6d9c2b5e3b7';
+const AMAP_KEY = 'fd6164c500d567b965a18497e92139d9';
+const AMAP_SECRET = '699e495168e30b5c0dc90291b04836d1';
 let map, geocoder, markers = [], favIds = new Set(), hiddenIds = new Set(), showFavOnly = false, currentSchool = null;
 let amapLoaded = false;
 
@@ -8,6 +9,8 @@ let amapLoaded = false;
 function loadAMap(callback) {
   if (amapLoaded) { callback(); return; }
   if (window.AMap) { amapLoaded = true; callback(); return; }
+  // JS API v2.0 安全密钥配置（必须在加载API前设置）
+  window._AMapSecurityConfig = { securityJsCode: AMAP_SECRET };
   const script = document.createElement('script');
   script.src = 'https://webapi.amap.com/maps?v=2.0&key=' + AMAP_KEY + '&plugin=AMap.Geocoder';
   script.onload = function() { amapLoaded = true; callback(); };
