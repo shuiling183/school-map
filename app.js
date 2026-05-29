@@ -1,7 +1,5 @@
-// ===== 上海初中分布地图 v11 =====
-// 清除旧缓存
-localStorage.removeItem('geo_cache');
-var PASSWORD='shanghai2026',map,favIds,hiddenIds,showFavOnly,currentSchool;
+// ===== 上海初中分布地图 v12 =====
+var PASSWORD='shanghai2026',VERSION='v12',map,favIds,hiddenIds,showFavOnly,currentSchool;
 
 // ====== 登录 ======
 function doLogin(){var p=document.getElementById('pwdInput').value;if(p===PASSWORD){localStorage.setItem('auth_school_map','true');showMap();}else document.getElementById('loginError').style.display='block';}
@@ -28,7 +26,16 @@ function initMap(){
   map=new AMap.Map('mapContainer',{zoom:11,center:[121.47,31.22],mapStyle:'amap://styles/light',viewMode:'3D'});
   populateFilters();
   doRender();
-  setTimeout(startGeocoding,600);
+  // 轮询等待Geocoder插件就绪
+  waitForGeocoder();
+}
+
+function waitForGeocoder(tries){
+  tries=tries||0;
+  if(tries>20){document.getElementById('schoolCount').textContent='⚠ Geocoder未加载，使用近似坐标';updateStatus();return;}
+  if(typeof AMap!=='undefined'&&AMap.Geocoder){startGeocoding();return;}
+  document.getElementById('schoolCount').textContent='⏳ 加载定位服务...'+(tries+1)+'/20';
+  setTimeout(function(){waitForGeocoder(tries+1);},500);
 }
 
 function populateFilters(){
@@ -50,8 +57,6 @@ function startGeocoding(){
   if(todo.length===0){updateStatus();return;}
   geoCodingActive=true;geoTotal=todo.length;geoDone=0;
   document.getElementById('schoolCount').innerHTML='📍 正在精确定位 <b>0/'+geoTotal+'</b> 所学校...';
-  // 检查Geocoder是否可用
-  if(typeof AMap==='undefined'||!AMap.Geocoder){document.getElementById('schoolCount').textContent='⚠ Geocoder未加载，使用近似坐标';geoCodingActive=false;return;}
   var geocoder=new AMap.Geocoder({city:'上海'}),i=0,count=0;
   function next(){
     if(i>=todo.length){setGeoCache(cache);geoCodingActive=false;updateStatus();doRender();console.log('Geocoding done:',count,'/',todo.length);return;}
@@ -72,7 +77,7 @@ function startGeocoding(){
   }
   next();
 }
-function updateStatus(){document.getElementById('schoolCount').textContent='共 '+ALL_SCHOOLS.length+' 所学校';}
+function updateStatus(){document.getElementById('schoolCount').innerHTML='共 '+ALL_SCHOOLS.length+' 所学校 <span style=\"color:#888;font-size:10px;\">('+VERSION+')</span> <a href=\"#\" onclick=\"localStorage.removeItem(\'geo_cache_v2\');alert(\'坐标缓存已清除，刷新后重新定位\');location.reload();return false;\" style=\"color:#e94560;font-size:10px;\">🔄重置定位</a>';}
 
 // ====== 搜索 ======
 function matchSearch(school,keyword){
