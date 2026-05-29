@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"><title>Test</title>
+<style>#map{width:100%;height:100vh;}</style>
+</head>
+<body>
+<div id="map"></div>
+<script>
+window._AMapSecurityConfig={securityJsCode:'699e495168e30b5c0dc90291b04836d1'};
+</script>
+<script src="https://webapi.amap.com/maps?v=2.0&key=fd6164c500d567b965a18497e92139d9"></script>
+<script>
+var m=new AMap.Map('map',{zoom:12,center:[121.47,31.23]});
+// Simplest marker
+var mk=new AMap.Marker({position:[121.47,31.23]});
+m.add(mk);
+console.log('Map loaded, marker added');
+// Test 2: circle marker
+var circle=new AMap.CircleMarker({center:[121.48,31.24],radius:10,fillColor:'red',fillOpacity:1,strokeColor:'white',strokeWeight:2});
+circle.setMap(m);
+console.log('Circle added');
+</script>
+</body>
+</html>
