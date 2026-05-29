@@ -1,4 +1,4 @@
-// ===== 上海初中分布地图 v8 - 坐标精确版 + 编辑 + Excel同步 =====
+// ===== 上海初中分布地图 v10 =====
 var PASSWORD='shanghai2026',map,favIds,hiddenIds,showFavOnly,currentSchool;
 
 // ====== 登录 ======
