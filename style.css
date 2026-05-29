@@ -1,0 +1,57 @@
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Microsoft YaHei','PingFang SC',sans-serif;height:100vh;overflow:hidden}
+
+/* Login */
+#loginPage{display:flex;align-items:center;justify-content:center;height:100vh;background:linear-gradient(135deg,#1a1a2e 0%,#16213e 50%,#0f3460 100%)}
+.login-box{background:rgba(255,255,255,0.05);padding:50px 40px;border-radius:16px;text-align:center;backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.1)}
+.login-box h1{color:#fff;font-size:24px;margin-bottom:30px}
+.login-box p{color:#aaa;margin-bottom:15px;font-size:14px}
+.login-box input{padding:12px 20px;width:280px;border:1px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.1);color:#fff;border-radius:8px;font-size:16px;outline:none;text-align:center}
+.login-box input:focus{border-color:#e94560}
+.login-box button{margin-top:15px;padding:12px 40px;background:#e94560;color:#fff;border:none;border-radius:8px;font-size:16px;cursor:pointer;width:280px}
+.login-box button:hover{background:#c73b52}
+.login-box .hint{color:#666;font-size:12px;margin-top:20px}
+
+/* Top bar */
+#topBar{position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(26,26,46,0.95);padding:10px 20px;display:flex;align-items:center;justify-content:space-between;backdrop-filter:blur(10px);border-bottom:1px solid rgba(255,255,255,0.1)}
+#topBar .logo{color:#fff;font-size:16px;font-weight:bold;white-space:nowrap}
+.toolbar-right{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.toolbar-right select,.toolbar-right input{padding:6px 10px;background:#16213e;color:#eee;border:1px solid #333;border-radius:4px;font-size:13px;outline:none}
+.toolbar-right button{padding:6px 12px;background:#f39c12;color:#fff;border:none;border-radius:4px;cursor:pointer;font-size:13px;white-space:nowrap}
+.toolbar-right button.active{background:#e94560}
+
+/* Map */
+#mapContainer{width:100%;height:100vh;padding-top:50px}
+
+/* Info bar */
+#infoBar{position:fixed;bottom:0;left:0;right:0;z-index:1000;background:rgba(26,26,46,0.95);padding:8px 20px;color:#aaa;font-size:12px;display:flex;align-items:center;border-top:1px solid rgba(255,255,255,0.1)}
+.dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:4px;margin-left:12px}
+.dot.red{background:#e94560}.dot.orange{background:#f39c12}.dot.blue{background:#3498db}
+.dot.green{background:#2ecc71}.dot.gray{background:#95a5a6}
+
+/* Detail panel */
+#detailPanel{position:fixed;right:0;top:50px;bottom:30px;width:380px;z-index:999;background:rgba(26,26,46,0.97);color:#eee;overflow-y:auto;border-left:1px solid rgba(255,255,255,0.1);padding:15px;backdrop-filter:blur(10px)}
+#detailPanel h3{font-size:16px;margin-bottom:12px}
+#detailPanel .close{float:right;color:#aaa;cursor:pointer;font-size:18px;background:none;border:none}
+.detail-row{display:flex;padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.05);font-size:13px}
+.detail-row .label{color:#aaa;width:90px;flex-shrink:0}
+.detail-row .value{color:#eee;flex:1}
+.tier-tag{display:inline-block;padding:2px 8px;border-radius:10px;font-size:11px;color:#fff}
+.tier-tag.t1{background:#e94560}.tier-tag.t2{background:#f39c12}.tier-tag.t3{background:#3498db}
+.btn-row{margin-top:12px;display:flex;gap:8px}
+.btn-row button{padding:6px 16px;border:none;border-radius:4px;cursor:pointer;font-size:13px}
+.btn-save{background:#e94560;color:#fff}
+.btn-fav{background:#f39c12;color:#fff}
+.btn-close{background:#555;color:#fff}
+textarea.edit-area{width:100%;height:60px;background:#16213e;color:#eee;border:1px solid #333;padding:8px;font-size:13px;margin:8px 0;border-radius:4px;resize:vertical}
+
+/* InfoWindow */
+.amap-info-content{font-size:13px;min-width:200px;line-height:1.8}
+.amap-info-content h4{margin-bottom:5px}
+.amap-info-content .look{color:#e94560;cursor:pointer;text-decoration:underline}
+
+/* Marker label */
+.marker-label{position:absolute;white-space:nowrap;font-size:11px;color:#333;font-weight:bold;text-shadow:0 0 3px #fff,0 0 3px #fff;pointer-events:none;transform:translate(-50%,-130%)}
+
+/* Responsive */
+@media(max-width:768px){.toolbar-right{display:none}#detailPanel{width:100%}}
