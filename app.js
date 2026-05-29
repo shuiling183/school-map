@@ -1,4 +1,4 @@
-// ===== 上海初中分布地图 v4 - 最简标记 =====
+// ===== 上海初中分布地图 v5 - 同步加载 =====
 var PASSWORD='shanghai2026';
 
 // 登录
@@ -13,19 +13,8 @@ document.getElementById('pwdInput').addEventListener('keydown',function(e){if(e.
 function showMap(){
   document.getElementById('loginPage').style.display='none';
   document.getElementById('mapPage').style.display='block';
-  loadAMap(initMap);
-}
-
-// 加载高德
-var _amapReady=false;
-function loadAMap(cb){
-  if(_amapReady){cb();return;}
-  window._AMapSecurityConfig={securityJsCode:'699e495168e30b5c0dc90291b04836d1'};
-  var s=document.createElement('script');
-  s.src='https://webapi.amap.com/maps?v=2.0&key=fd6164c500d567b965a18497e92139d9';
-  s.onload=function(){_amapReady=true;cb();};
-  s.onerror=function(){alert('高德地图加载失败，请刷新重试');};
-  document.head.appendChild(s);
+  // 延迟确保DOM渲染完成后再初始化地图
+  setTimeout(initMap,200);
 }
 
 var map,favIds,hiddenIds,showFavOnly,currentSchool,allMarkers=[];
