@@ -273,7 +273,7 @@ function openDetail(school){
   if(school._extra) h+=' <button onclick="deleteSchool('+school.id+')" style="background:#e74c3c">删除</button>';
   h+=' <button onclick="closeDetail()">关闭</button></div>';
   var hist=getHistory().filter(function(x){return x.n===school.name;});
-  if(hist.length>0){h+="<hr><b>修改记录</b><br>";for(var i=0;i<Math.min(hist.length,5);i++){h+="<div style="font-size:10px;color:#aaa;margin:3px 0;padding:4px;background:rgba(255,255,255,0.03);border-radius:2px">"+hist[i].t+"<br>"+hist[i].c+"</div>";}}
+  if(hist.length>0){h+="<hr><b>修改记录</b><br>";for(var i=0;i<Math.min(hist.length,5);i++){h+="<div style=font-size:10px;color:#aaa;margin:3px 0;padding:4px;background:rgba(255,255,255,0.03);border-radius:2px>"+hist[i].t+"<br>"+hist[i].c+"</div>";}}
   document.getElementById("detailContent").innerHTML=h;
   document.getElementById("detailPanel").style.display="block";
 }
