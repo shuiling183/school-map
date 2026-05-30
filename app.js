@@ -1,20 +1,20 @@
-// v36 Shanghai normal style fix subway + schools School Map
+// v37 Shanghai unified keys normal style fix subway + schools School Map
 var P="shanghai2026",V="v32",map,favIds=new Set,hiddenIds=new Set,favOnly=false,cur,ps,gcActive=false,sm=[],shHidden=false,wd=null;
 
-function doLogin(){if(document.getElementById("pwdInput").value===P){localStorage.setItem("a32","1");document.getElementById("loginPage").style.display="none";document.getElementById("mapPage").style.display="flex";setTimeout(init,100);}else document.getElementById("loginError").style.display="block";}
-if(localStorage.getItem("a32")==="1"){document.getElementById("loginPage").style.display="none";document.getElementById("mapPage").style.display="flex";setTimeout(init,100);}
+function doLogin(){if(document.getElementById("pwdInput").value===P){localStorage.setItem("a37","1");document.getElementById("loginPage").style.display="none";document.getElementById("mapPage").style.display="flex";setTimeout(init,100);}else document.getElementById("loginError").style.display="block";}
+if(localStorage.getItem("a37")==="1"){document.getElementById("loginPage").style.display="none";document.getElementById("mapPage").style.display="flex";setTimeout(init,100);}
 document.getElementById("pwdInput").addEventListener("keydown",function(e){if(e.key==="Enter")doLogin();});
 
 function ld(k,d){try{return JSON.parse(localStorage.getItem(k)||d);}catch(e){return JSON.parse(d);}}
 function saveStorage(k,v){localStorage.setItem(k,JSON.stringify(v));}
-function getEdits(){return ld("e32","{}");}function getGeoCache(){return ld("g32","{}");}function getExtraSchools(){return ld("x32","[]");}
+function getEdits(){return ld("e37","{}");}function getGeoCache(){return ld("g37","{}");}function getExtraSchools(){return ld("x37","[]");}
 function allSchools(){return ALL_SCHOOLS.concat(getExtraSchools());}
 function getSchoolData(s){var e=getEdits(),d=e[s.id]||{};return{tier:d.tier!=null?d.tier:s.tier,lot:d.lot!=null?d.lot:(s.lotteryRate||""),fd:d.fd!=null?d.fd:(s.feederSchool||""),cm:d.cm!=null?d.cm:(s.communities||""),s25:d.s25!=null?d.s25:s.srRate25,s24:d.s24!=null?d.s24:s.srRate24,s23:d.s23!=null?d.s23:s.srRate23,r25:d.r25!=null?d.r25:s.residency25,hl:d.hl!=null?d.hl:s.highlights,nt:d.nt!=null?d.nt:""};}
 function getCoord(s){var c=getGeoCache();if(c[s.id]&&c[s.id].lng)return c[s.id];var o=centerOf(s.district);if(!o)return null;return{lng:o[0]+Math.sin(s.id*12.7)*0.02,lat:o[1]+Math.cos(s.id*7.3)*0.02};}
 function centerOf(d){var m={黄浦:[121.48,31.23],徐汇:[121.44,31.19],长宁:[121.42,31.22],静安:[121.45,31.23],普陀:[121.40,31.25],虹口:[121.49,31.26],杨浦:[121.52,31.27],闵行:[121.38,31.12],浦东:[121.55,31.22],宝山:[121.48,31.40],嘉定:[121.25,31.38],松江:[121.23,31.03],青浦:[121.12,31.15],金山:[121.33,30.75],奉贤:[121.47,30.92],崇明:[121.40,31.62]};return m[d]||null;}
 
 function init(){
-  favIds=new Set(ld("f32","[]"));hiddenIds=new Set(ld("hd32","[]"));
+  favIds=new Set(ld("f37","[]"));hiddenIds=new Set(ld("h37","[]"));
   map=new AMap.Map("mapContainer",{zoom:13,center:[121.47,31.22],mapStyle:"amap://styles/normal",viewMode:"3D"});
   if(typeof AMap!=="undefined"&&AMap.PlaceSearch)ps=new AMap.PlaceSearch({city:"上海",pageSize:12});
   var ds=[],seen={},all=allSchools();
@@ -90,7 +90,7 @@ function addSchoolHere(lng,lat,name,addr){
   var cm=prompt("学区小区:",""),hl=prompt("亮点:","");
   var ex=getExtraSchools(),nid=90000+ex.length+1;
   ex.push({id:nid,district:d||"",name:name,type:tp||"公办",fullName:name,address:addr||"",tier:tier||"",srRate25:s25||"",lotteryRate:lot||"",feederSchool:fd||"",communities:cm||"",residency23:"",residency24:"",residency25:"",srRate23:"",srRate24:"",highlights:hl||"",_extra:true});
-  saveStorage("x32",ex);var cache=getGeoCache();cache[nid]={lng:lng,lat:lat};saveStorage("g32",cache);
+  saveStorage("x37",ex);var cache=getGeoCache();cache[nid]={lng:lng,lat:lat};saveStorage("g37",cache);
   cancelAddrSearch();doRender();showDetail(ex[ex.length-1]);
 }
 
@@ -114,10 +114,10 @@ function showDetail(s){
 }
 function editRow(l,id,v){return '<div style="margin:2px 0;font-size:12px">'+l+': <input id="'+id+'" value="'+(v||"").replace(/"/g,"&quot;")+'" style="width:100%;padding:3px 6px;background:#16213e;color:#eee;border:1px solid #444;border-radius:3px;font-size:12px"></div>';}
 function closeDetail(){document.getElementById("detailPanel").style.display="none";cur=null;}
-function saveEdit(id){var oe=getEdits(),od=oe[id]||{};var nd={tier:document.getElementById("t_"+id).value,s25:document.getElementById("s25_"+id).value,s24:document.getElementById("s24_"+id).value,s23:document.getElementById("s23_"+id).value,r25:document.getElementById("r25_"+id).value,lot:document.getElementById("lot_"+id).value,fd:document.getElementById("fd_"+id).value,cm:document.getElementById("cm_"+id).value,hl:document.getElementById("hl_"+id).value,nt:document.getElementById("nt_"+id).value};oe[id]=nd;saveStorage("e32",oe);doRender();var s=allSchools().find(function(x){return x.id===id;});if(s)showDetail(s);}
-function deleteSchool(id){if(!confirm("确定删除？"))return;var ex=getExtraSchools().filter(function(x){return x.id!==id;});saveStorage("x32",ex);closeDetail();doRender();}
-function toggleFav(id){if(favIds.has(id))favIds.delete(id);else favIds.add(id);saveStorage("f32",Array.from(favIds));doRender();if(cur&&cur.id===id)showDetail(cur);}
-function toggleHide(id){if(hiddenIds.has(id))hiddenIds.delete(id);else hiddenIds.add(id);saveStorage("hd32",Array.from(hiddenIds));doRender();if(cur&&cur.id===id)showDetail(cur);}
+function saveEdit(id){var oe=getEdits(),od=oe[id]||{};var nd={tier:document.getElementById("t_"+id).value,s25:document.getElementById("s25_"+id).value,s24:document.getElementById("s24_"+id).value,s23:document.getElementById("s23_"+id).value,r25:document.getElementById("r25_"+id).value,lot:document.getElementById("lot_"+id).value,fd:document.getElementById("fd_"+id).value,cm:document.getElementById("cm_"+id).value,hl:document.getElementById("hl_"+id).value,nt:document.getElementById("nt_"+id).value};oe[id]=nd;saveStorage("e37",oe);doRender();var s=allSchools().find(function(x){return x.id===id;});if(s)showDetail(s);}
+function deleteSchool(id){if(!confirm("确定删除？"))return;var ex=getExtraSchools().filter(function(x){return x.id!==id;});saveStorage("x37",ex);closeDetail();doRender();}
+function toggleFav(id){if(favIds.has(id))favIds.delete(id);else favIds.add(id);saveStorage("f37",Array.from(favIds));doRender();if(cur&&cur.id===id)showDetail(cur);}
+function toggleHide(id){if(hiddenIds.has(id))hiddenIds.delete(id);else hiddenIds.add(id);saveStorage("h37",Array.from(hiddenIds));doRender();if(cur&&cur.id===id)showDetail(cur);}
 function toggleFavFilter(){favOnly=!favOnly;var b=document.getElementById("favBtn");b.textContent=favOnly?"⭐ 显示全部":"⭐ 只看收藏";b.style.background=favOnly?"#e94560":"#555";doRender();}
 
 function exportCSV(){
@@ -135,11 +135,11 @@ function startGeocoding(silent){
   function watchdog(){if(wd)clearTimeout(wd);wd=setTimeout(function(){if(idx===lp&&gcActive){gcActive=false;doRender();}else{lp=idx;if(gcActive)watchdog();}},15000);}
   watchdog();
   function next(){
-    if(!gcActive||idx>=todo.length){if(idx>=todo.length){saveStorage("g32",cache);if(wd)clearTimeout(wd);}gcActive=false;doRender();return;}
+    if(!gcActive||idx>=todo.length){if(idx>=todo.length){saveStorage("g37",cache);if(wd)clearTimeout(wd);}gcActive=false;doRender();return;}
     var cur=todo[idx],cid=cur.id;
     gc.getLocation(cur.address,function(status,result){
       if(status==="complete"&&result.geocodes&&result.geocodes.length>0){var loc=result.geocodes[0].location;cache[cid]={lng:loc.lng,lat:loc.lat};ok++;}
-      idx++;if(idx%5===0||idx>=todo.length){saveStorage("g32",cache);doRender();}
+      idx++;if(idx%5===0||idx>=todo.length){saveStorage("g37",cache);doRender();}
       setTimeout(next,180);
     });
   }
