@@ -1,27 +1,27 @@
-// v37 Shanghai unified keys normal style fix subway + schools School Map
+// v38 fixed all short function names unified keys normal style fix subway + schools School Map
 var P="shanghai2026",V="v32",map,favIds=new Set,hiddenIds=new Set,favOnly=false,cur,ps,gcActive=false,sm=[],shHidden=false,wd=null;
 
 function doLogin(){if(document.getElementById("pwdInput").value===P){localStorage.setItem("a37","1");document.getElementById("loginPage").style.display="none";document.getElementById("mapPage").style.display="flex";setTimeout(init,100);}else document.getElementById("loginError").style.display="block";}
 if(localStorage.getItem("a37")==="1"){document.getElementById("loginPage").style.display="none";document.getElementById("mapPage").style.display="flex";setTimeout(init,100);}
 document.getElementById("pwdInput").addEventListener("keydown",function(e){if(e.key==="Enter")doLogin();});
 
-function ld(k,d){try{return JSON.parse(localStorage.getItem(k)||d);}catch(e){return JSON.parse(d);}}
+function loadData(k,d){try{return JSON.parse(localStorage.getItem(k)||d);}catch(e){return JSON.parse(d);}}
 function saveStorage(k,v){localStorage.setItem(k,JSON.stringify(v));}
-function getEdits(){return ld("e37","{}");}function getGeoCache(){return ld("g37","{}");}function getExtraSchools(){return ld("x37","[]");}
+function getEdits(){return loadData("e37","{}");}function getGeoCache(){return loadData("g37","{}");}function getExtraSchools(){return loadData("x37","[]");}
 function allSchools(){return ALL_SCHOOLS.concat(getExtraSchools());}
 function getSchoolData(s){var e=getEdits(),d=e[s.id]||{};return{tier:d.tier!=null?d.tier:s.tier,lot:d.lot!=null?d.lot:(s.lotteryRate||""),fd:d.fd!=null?d.fd:(s.feederSchool||""),cm:d.cm!=null?d.cm:(s.communities||""),s25:d.s25!=null?d.s25:s.srRate25,s24:d.s24!=null?d.s24:s.srRate24,s23:d.s23!=null?d.s23:s.srRate23,r25:d.r25!=null?d.r25:s.residency25,hl:d.hl!=null?d.hl:s.highlights,nt:d.nt!=null?d.nt:""};}
 function getCoord(s){var c=getGeoCache();if(c[s.id]&&c[s.id].lng)return c[s.id];var o=centerOf(s.district);if(!o)return null;return{lng:o[0]+Math.sin(s.id*12.7)*0.02,lat:o[1]+Math.cos(s.id*7.3)*0.02};}
 function centerOf(d){var m={黄浦:[121.48,31.23],徐汇:[121.44,31.19],长宁:[121.42,31.22],静安:[121.45,31.23],普陀:[121.40,31.25],虹口:[121.49,31.26],杨浦:[121.52,31.27],闵行:[121.38,31.12],浦东:[121.55,31.22],宝山:[121.48,31.40],嘉定:[121.25,31.38],松江:[121.23,31.03],青浦:[121.12,31.15],金山:[121.33,30.75],奉贤:[121.47,30.92],崇明:[121.40,31.62]};return m[d]||null;}
 
 function init(){
-  favIds=new Set(ld("f37","[]"));hiddenIds=new Set(ld("h37","[]"));
+  favIds=new Set(loadData("f37","[]"));hiddenIds=new Set(loadData("h37","[]"));
   map=new AMap.Map("mapContainer",{zoom:13,center:[121.47,31.22],mapStyle:"amap://styles/normal",viewMode:"3D"});
   if(typeof AMap!=="undefined"&&AMap.PlaceSearch)ps=new AMap.PlaceSearch({city:"上海",pageSize:12});
   var ds=[],seen={},all=allSchools();
   for(var i=0;i<all.length;i++){var d=all[i].district;if(d&&!seen[d]){ds.push(d);seen[d]=1;}}
   ds.sort();var sel=document.getElementById("districtFilter");
   for(i=0;i<ds.length;i++){var o=document.createElement("option");o.value=ds[i];o.textContent=ds[i];sel.appendChild(o);}
-  sel.onchange=dr;document.getElementById("tierFilter").onchange=dr;document.getElementById("typeFilter").onchange=dr;
+  sel.onchange=doRender;document.getElementById("tierFilter").onchange=doRender;document.getElementById("typeFilter").onchange=doRender;
   document.getElementById("schoolSearch").addEventListener("input",dr);
   document.getElementById("addrSearch").addEventListener("keydown",function(e){if(e.key==="Enter")addrSearchGo();});
   
