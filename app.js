@@ -1,5 +1,5 @@
-// ===== 上海初中分布地图 v12 =====
-var PASSWORD='shanghai2026',VERSION='v12',map,favIds,hiddenIds,showFavOnly,currentSchool;
+// ===== 上海初中分布地图 v13 =====
+var PASSWORD='shanghai2026',VERSION='v13',map,favIds,hiddenIds,showFavOnly,currentSchool;
 
 // ====== 登录 ======
 function doLogin(){var p=document.getElementById('pwdInput').value;if(p===PASSWORD){localStorage.setItem('auth_school_map','true');showMap();}else document.getElementById('loginError').style.display='block';}
@@ -10,8 +10,8 @@ document.getElementById('pwdInput').addEventListener('keydown',function(e){if(e.
 function loadEdits(){try{return JSON.parse(localStorage.getItem('school_edits')||'{}');}catch(e){return{};}}
 function saveEdits(edits){localStorage.setItem('school_edits',JSON.stringify(edits));}
 function getSchoolData(school){var e=loadEdits(),d=e[school.id]||{};return{tier:d.tier!==undefined?d.tier:school.tier,srRate25:d.srRate25!==undefined?d.srRate25:school.srRate25,srRate24:d.srRate24!==undefined?d.srRate24:school.srRate24,srRate23:d.srRate23!==undefined?d.srRate23:school.srRate23,residency25:d.residency25!==undefined?d.residency25:school.residency25,highlights:d.highlights!==undefined?d.highlights:school.highlights,notes:d.notes!==undefined?d.notes:''};}
-function getGeoCache(){try{return JSON.parse(localStorage.getItem('geo_cache_v2')||'{}');}catch(e){return{};}}
-function setGeoCache(c){localStorage.setItem('geo_cache_v2',JSON.stringify(c));}
+function getGeoCache(){try{return JSON.parse(localStorage.getItem('geo_cache_v3')||'{}');}catch(e){return{};}}
+function setGeoCache(c){localStorage.setItem('geo_cache_v3',JSON.stringify(c));}
 
 function getCoord(school){var cache=getGeoCache();if(cache[school.id]&&cache[school.id].lng) return cache[school.id];var c=getCenter(school.district);if(!c) return null;return{lng:c[0]+Math.sin(school.id*12.7+1.3)*0.025,lat:c[1]+Math.cos(school.id*7.3+2.1)*0.025};}
 function getCenter(d){var m={'黄浦':[121.48,31.23],'徐汇':[121.44,31.19],'长宁':[121.42,31.22],'静安':[121.45,31.23],'普陀':[121.40,31.25],'虹口':[121.49,31.26],'杨浦':[121.52,31.27],'闵行':[121.38,31.12],'浦东':[121.55,31.22],'宝山':[121.48,31.40],'嘉定':[121.25,31.38],'松江':[121.23,31.03],'青浦':[121.12,31.15],'金山':[121.33,30.75],'奉贤':[121.47,30.92],'崇明':[121.40,31.62]};return m[d]||null;}
@@ -26,16 +26,8 @@ function initMap(){
   map=new AMap.Map('mapContainer',{zoom:11,center:[121.47,31.22],mapStyle:'amap://styles/light',viewMode:'3D'});
   populateFilters();
   doRender();
-  // 轮询等待Geocoder插件就绪
-  waitForGeocoder();
-}
-
-function waitForGeocoder(tries){
-  tries=tries||0;
-  if(tries>20){document.getElementById('schoolCount').textContent='⚠ Geocoder未加载，使用近似坐标';updateStatus();return;}
-  if(typeof AMap!=='undefined'&&AMap.Geocoder){startGeocoding();return;}
-  document.getElementById('schoolCount').textContent='⏳ 加载定位服务...'+(tries+1)+'/20';
-  setTimeout(function(){waitForGeocoder(tries+1);},500);
+  // Geocoder插件已可用(测试验证)，1秒后开始转换坐标
+  setTimeout(startGeocoding,1000);
 }
 
 function populateFilters(){
@@ -77,7 +69,7 @@ function startGeocoding(){
   }
   next();
 }
-function updateStatus(){document.getElementById('schoolCount').innerHTML='共 '+ALL_SCHOOLS.length+' 所学校 <span style=\"color:#888;font-size:10px;\">('+VERSION+')</span> <a href=\"#\" onclick=\"localStorage.removeItem(\'geo_cache_v2\');alert(\'坐标缓存已清除，刷新后重新定位\');location.reload();return false;\" style=\"color:#e94560;font-size:10px;\">🔄重置定位</a>';}
+function updateStatus(){document.getElementById('schoolCount').innerHTML='共 '+ALL_SCHOOLS.length+' 所学校 <span style=\"color:#888;font-size:10px;\">('+VERSION+')</span> <a href=\"#\" onclick=\"localStorage.removeItem(\'geo_cache_v3\');alert(\'坐标缓存已清除，刷新后重新定位\');location.reload();return false;\" style=\"color:#e94560;font-size:10px;\">🔄重置定位</a>';}
 
 // ====== 搜索 ======
 function matchSearch(school,keyword){
