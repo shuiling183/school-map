@@ -1,5 +1,5 @@
-// v30 - macaron + subway stations Gaode full rendering + coord note address search with visual markers
-var VERSION='v30',map,favIds,hiddenIds,showFavOnly,currentSchool,placeSearch,geoCodingActive=false,_searchMarkers=[],_schoolsHidden=false,_geoWatchdog=null;
+// v31 - macaron + subway fix stations Gaode full rendering + coord note address search with visual markers
+var VERSION='v31',map,favIds,hiddenIds,showFavOnly,currentSchool,placeSearch,geoCodingActive=false,_searchMarkers=[],_schoolsHidden=false,_geoWatchdog=null;
 
 function doLogin(){if(document.getElementById('pwdInput').value==='shanghai2026'){localStorage.setItem('a26','1');document.getElementById('loginPage').style.display='none';document.getElementById('mapPage').style.display='flex';setTimeout(initMap,100);}else document.getElementById('loginError').style.display='block';}
 if(localStorage.getItem('a26')==='1'){document.getElementById('loginPage').style.display='none';document.getElementById('mapPage').style.display='flex';setTimeout(initMap,100);}
@@ -17,7 +17,7 @@ function ctr(d){var m={黄浦:[121.48,31.23],徐汇:[121.44,31.19],长宁:[121.4
 // ====== INIT ======
 function initMap(){
   favIds=new Set(ld('f26','[]'));hiddenIds=new Set(ld('hd26','[]'));showFavOnly=false;
-  map=new AMap.Map('mapContainer',{zoom:11,center:[121.47,31.22],mapStyle:'amap://styles/macaron',viewMode:'3D',layers:[new AMap.TileLayer.Subway()]});
+  map=new AMap.Map('mapContainer',{zoom:11,center:[121.47,31.22],mapStyle:'amap://styles/macaron',viewMode:'3D'});
   if(typeof AMap!=='undefined'&&AMap.PlaceSearch)placeSearch=new AMap.PlaceSearch({city:'上海',pageSize:12});
   var ds=[],seen={},all=allS();
   for(var i=0;i<all.length;i++){var d=all[i].district;if(d&&!seen[d]){ds.push(d);seen[d]=1;}}
@@ -33,6 +33,7 @@ function initMap(){
 }
 
 // ====== RENDER ======
+setTimeout(function(){// Add subway layer safely  try{if(AMap.TileLayer&&AMap.TileLayer.Subway){var sw=new AMap.TileLayer.Subway();sw.setMap(map);}}catch(e){}},500);
 function doRender(){
   if(!map||_schoolsHidden)return; // Don't render schools during address search
   map.clearMap();clearOutlines();
