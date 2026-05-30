@@ -1,6 +1,6 @@
 
-// v41 Shanghai quote fix quote fix School Map - clean, no shortcuts
-var PWD="shanghai2026",VER="v41",theMap,favorites=new Set,hiddenSchools=new Set,favOnly=false,currentDetail,placeSearch,geoCodingActive=false,searchMarkers=[],schoolsHidden=false,watchdog=null;
+// v39 Shanghai School Map - clean, no shortcuts
+var PWD="shanghai2026",VER="v39",theMap,favorites=new Set,hiddenSchools=new Set,favOnly=false,currentDetail,placeSearch,geoCodingActive=false,searchMarkers=[],schoolsHidden=false,watchdog=null;
 
 // ====== Login ======
 function doLogin(){
@@ -122,7 +122,7 @@ function renderSchools(){
   if(geoCodingActive){
     el.innerHTML='<span style="color:#f39c12">校正中...</span> 共'+list.length+'所 ('+VER+')';
   }else{
-    el.innerHTML="共 "+list.length+" 所 ("+VER+") <a href=# onclick=startGeocoding(false) style=color:#2ecc71>校正坐标</a> <a href=# onclick=clearGeoAndReload() style=color:#e94560>清除缓存</a>";
+    el.innerHTML='共 '+list.length+' 所 ('+VER+') <a href="#" onclick="startGeocoding(false)" style="color:#2ecc71">校正坐标</a> <a href="#" onclick="localStorage.removeItem('geo39');location.reload()" style="color:#e94560">清除缓存</a>';
   }
 }
 
@@ -184,10 +184,7 @@ function searchAddress(){
   });
 }
 function selectAddrResult(poi){
-  if(confirm("选择: "+poi.name+"
-"+poi.address+"
-
-在此新增学校？")){
+  if(confirm("选择: "+poi.name+"\n"+poi.address+"\n\n在此新增学校？")){
     addSchoolHere(poi.location.lng,poi.location.lat,poi.name,poi.address);
   }
 }
@@ -262,8 +259,6 @@ function toggleHidden(id){if(hiddenSchools.has(id)) hiddenSchools.delete(id);els
 function toggleFavFilter(){favOnly=!favOnly;var b=document.getElementById("favBtn");b.textContent=favOnly?"⭐ 显示全部":"⭐ 只看收藏";b.style.background=favOnly?"#e94560":"#555";renderSchools();}
 
 // ====== Export ======
-
-function clearGeoAndReload(){localStorage.removeItem("geo39");location.reload();}
 function exportCSV(){
   var edits=getEdits(),csv="区域,简称,性质,全称,中签率,入户23,入户24,入户25,对口小学,学区小区,市重率23,市重率24,市重率25,梯队,亮点,地址,自定义
 ";
