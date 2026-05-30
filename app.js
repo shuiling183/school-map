@@ -261,13 +261,11 @@ function toggleFavFilter(){favOnly=!favOnly;var b=document.getElementById("favBt
 // ====== Export ======
 function clearGeoAndReload(){localStorage.removeItem("geo39");location.reload();}
 function exportCSV(){
-  var edits=getEdits(),csv="区域,简称,性质,全称,中签率,入户23,入户24,入户25,对口小学,学区小区,市重率23,市重率24,市重率25,梯队,亮点,地址,自定义
-";
+  var edits=getEdits(),csv="区域,简称,性质,全称,中签率,入户23,入户24,入户25,对口小学,学区小区,市重率23,市重率24,市重率25,梯队,亮点,地址,自定义\n";
   var all=allSchools();
   for(var i=0;i<all.length;i++){
     var s=all[i],d=getSchoolData(s);
-    csv+=['"'+s.district+'"','"'+s.name+'"','"'+s.type+'"','"'+(s.fullName||"")+'"','"'+d.lottery+'"','"'+(s.residency23||"")+'"','"'+(s.residency24||"")+'"','"'+d.res25+'"','"'+d.feeder+'"','"'+d.communities+'"','"'+d.rate23+'"','"'+d.rate24+'"','"'+d.rate25+'"','"'+d.tier+'"','"'+d.highlights+'"','"'+(s.address||"")+'"','"'+(s._extra?"是":"")+'"'].join(",")+"
-";
+    csv+=['"'+s.district+'"','"'+s.name+'"','"'+s.type+'"','"'+(s.fullName||"")+'"','"'+d.lottery+'"','"'+(s.residency23||"")+'"','"'+(s.residency24||"")+'"','"'+d.res25+'"','"'+d.feeder+'"','"'+d.communities+'"','"'+d.rate23+'"','"'+d.rate24+'"','"'+d.rate25+'"','"'+d.tier+'"','"'+d.highlights+'"','"'+(s.address||"")+'"','"'+(s._extra?"是":"")+'"'].join(",")+"\n";
   }
   var b=new Blob(["﻿"+csv],{type:"text/csv;charset=utf-8"});
   var a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="初中排名_"+new Date().toISOString().slice(0,10)+".csv";a.click();
