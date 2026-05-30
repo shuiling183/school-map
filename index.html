@@ -30,7 +30,8 @@
       <select id="typeFilter"><option value="">全部</option><option value="公办">公办</option><option value="民办">民办</option></select>
       <input type="text" id="searchInput" placeholder="搜索学校..." style="width:120px;">
       <button onclick="toggleFav()" id="favBtn">⭐ 只看收藏</button>
-      <button onclick="exportFav()" style="background:#2ecc71;color:#fff;border:none;padding:6px 10px;border-radius:4px;cursor:pointer;font-size:12px;">📥 导出</button>
+      <button onclick="exportCSV()" style="background:#2ecc71;color:#fff;border:none;padding:6px 10px;border-radius:4px;cursor:pointer;font-size:12px;">📥 导出CSV</button>
+	      <button onclick="importCSV()" style="background:#3498db;color:#fff;border:none;padding:6px 10px;border-radius:4px;cursor:pointer;font-size:12px;">📤 导入CSV</button>
     </div>
   </div>
   <div id="mapContainer"></div>
@@ -44,8 +45,8 @@
 <script>
 window._AMapSecurityConfig={securityJsCode:'699e495168e30b5c0dc90291b04836d1'};
 </script>
-<script src="https://webapi.amap.com/maps?v=13.0&key=fd6164c500d567b965a18497e92139d9&plugin=AMap.Geocoder"></script>
-<script src="schools_data.js?v=13"></script>
-<script src="app.js?v=13"></script>
+<script src="https://webapi.amap.com/maps?v=14.0&key=fd6164c500d567b965a18497e92139d9&plugin=AMap.Geocoder"></script>
+<script src="schools_data.js?v=14"></script>
+<script src="app.js?v=14"></script>
 </body>
 </html>
