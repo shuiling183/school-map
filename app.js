@@ -1,5 +1,5 @@
-// v18 - built from proven map.html pattern
-var VERSION='v18',map,favIds,hiddenIds,showFavOnly,currentSchool;
+// v19 - API fix from proven map.html pattern
+var VERSION='v19',map,favIds,hiddenIds,showFavOnly,currentSchool;
 
 // Login
 function doLogin(){
