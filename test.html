@@ -1,24 +1,45 @@
 <!DOCTYPE html>
 <html>
-<head><meta charset="UTF-8"><title>Test</title>
-<style>#map{width:100%;height:100vh;}</style>
+<head><meta charset="UTF-8"><title>Geocoder Test</title>
+<style>body{margin:0;font-family:sans-serif}#map{width:100%;height:80vh}#log{height:20vh;overflow-y:auto;background:#111;color:#0f0;padding:10px;font-size:12px}</style>
 </head>
 <body>
 <div id="map"></div>
+<div id="log"></div>
 <script>
 window._AMapSecurityConfig={securityJsCode:'699e495168e30b5c0dc90291b04836d1'};
+function log(msg){var d=document.getElementById('log');d.innerHTML+=msg+'<br>';d.scrollTop=d.scrollHeight;console.log(msg);}
 </script>
-<script src="https://webapi.amap.com/maps?v=2.0&key=fd6164c500d567b965a18497e92139d9"></script>
+<script src="https://webapi.amap.com/maps?v=2.0&key=fd6164c500d567b965a18497e92139d9&plugin=AMap.Geocoder"></script>
 <script>
-var m=new AMap.Map('map',{zoom:12,center:[121.47,31.23]});
-// Simplest marker
-var mk=new AMap.Marker({position:[121.47,31.23]});
-m.add(mk);
-console.log('Map loaded, marker added');
-// Test 2: circle marker
-var circle=new AMap.CircleMarker({center:[121.48,31.24],radius:10,fillColor:'red',fillOpacity:1,strokeColor:'white',strokeWeight:2});
-circle.setMap(m);
-console.log('Circle added');
+log('Script loaded, checking AMap.Geocoder...');
+setTimeout(function(){
+  log('typeof AMap: '+(typeof AMap));
+  log('AMap.Geocoder: '+(typeof AMap.Geocoder));
+  log('AMap.version: '+(AMap.version||'unknown'));
+  
+  var map=new AMap.Map('map',{zoom:12,center:[121.47,31.23]});
+  
+  if(typeof AMap.Geocoder!=='undefined'){
+    log('Geocoder available. Testing...');
+    var gc=new AMap.Geocoder({city:'上海'});
+    gc.getLocation('上海市杨浦区政和路359号',function(status,result){
+      log('Status: '+status);
+      if(status==='complete'&&result.geocodes&&result.geocodes.length>0){
+        var loc=result.geocodes[0].location;
+        log('SUCCESS: lng='+loc.lng+' lat='+loc.lat);
+        // Add marker at result
+        new AMap.Marker({position:[loc.lng,loc.lat]}).setMap(map);
+        map.setCenter([loc.lng,loc.lat]);
+      }else{
+        log('FAILED: '+JSON.stringify(result));
+      }
+    });
+  }else{
+    log('AMap.Geocoder is undefined! Plugin not loaded.');
+    log('Available AMap keys: '+Object.keys(AMap).filter(function(k){return AMap[k]!==undefined;}).join(', '));
+  }
+},1000);
 </script>
 </body>
 </html>
