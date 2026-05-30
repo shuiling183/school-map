@@ -1,12 +1,10 @@
-// ===== 上海初中分布地图 v16 =====
+// ===== 上海初中分布地图 v15 =====
 var PASSWORD='shanghai2026',VERSION='v15',map,favIds,hiddenIds,showFavOnly,currentSchool,geoCodingActive=false;
 
 // ====== 登录 ======
 function doLogin(){var p=document.getElementById('pwdInput').value;if(p===PASSWORD){localStorage.setItem('auth_v2','true');showMap();}else document.getElementById('loginError').style.display='block';}
-document.addEventListener('DOMContentLoaded',function(){
-  if(localStorage.getItem('auth_v2')==='true'){var lp=document.getElementById('loginPage'),mp=document.getElementById('mapPage');if(lp&&mp){lp.style.display='none';mp.style.display='block';setTimeout(initMap,300);}}
-  var pi=document.getElementById('pwdInput');if(pi) pi.addEventListener('keydown',function(e){if(e.key==='Enter')doLogin();});
-});
+if(localStorage.getItem('auth_v2')==='true'){document.getElementById('loginPage').style.display='none';document.getElementById('mapPage').style.display='block';window.addEventListener('load',showMap);}
+document.getElementById('pwdInput').addEventListener('keydown',function(e){if(e.key==='Enter')doLogin();});
 
 // ====== 数据管理 ======
 function loadEdits(){try{return JSON.parse(localStorage.getItem('edits_v2')||'{}');}catch(e){return{};}}
@@ -74,9 +72,9 @@ function addOne(school){
   if(favIds.has(school.id)) new AMap.Text({text:'*',position:[lng,lat],offset:new AMap.Pixel(0,-r-8),style:{'font-size':'14px','color':'#f39c12','font-weight':'bold','text-align':'center'},zIndex:102}).setMap(map);
   cm.on('click',function(){showDetail(school);});
 }
-function updStatus(){var el=document.getElementById("schoolCount");el.innerHTML="共 "+ALL_SCHOOLS.length+" 所学校 ("+VERSION+") " +"<a href=\"#\" onclick=\"startGeocoding();return false;\" style=\"color:#2ecc71;font-size:11px;\">精确定位</a> " +"<a href=\"#\" onclick=\"clearGeoCache();location.reload();return false;\" style=\"color:#e94560;font-size:11px;\">重置</a>";}
-
-function clearGeoCache(){localStorage.removeItem("geo_v5");}
+function updStatus(){
+  document.getElementById('schoolCount').innerHTML='共 '+ALL_SCHOOLS.length+' 所学校 ('+VERSION+') <a href="#" onclick="startGeocoding();return false;" style="color:#2ecc71;font-size:11px;">精确定位</a> <a href="#" onclick="localStorage.removeItem('geo_v5');location.reload();return false;" style="color:#e94560;font-size:11px;">重置</a>';
+}
 
 // ====== 地理编码 ======
 function startGeocoding(){
