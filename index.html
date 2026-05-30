@@ -4,42 +4,60 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>上海初中学校分布地图</title>
-<link rel="stylesheet" href="style.css">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Microsoft YaHei',sans-serif;height:100vh;overflow:hidden}
+#loginPage{display:flex;align-items:center;justify-content:center;height:100vh;background:linear-gradient(135deg,#1a1a2e,#16213e,#0f3460)}
+.login-box{background:rgba(255,255,255,0.05);padding:50px 40px;border-radius:16px;text-align:center;border:1px solid rgba(255,255,255,0.1)}
+.login-box h1{color:#fff;font-size:24px;margin-bottom:20px}
+.login-box input{padding:12px 20px;width:280px;background:rgba(255,255,255,0.1);color:#fff;border:1px solid rgba(255,255,255,0.2);border-radius:8px;font-size:16px;outline:none;text-align:center}
+.login-box input:focus{border-color:#e94560}
+.login-box button{margin-top:15px;padding:12px 40px;background:#e94560;color:#fff;border:none;border-radius:8px;font-size:16px;cursor:pointer;width:280px}
+.login-box button:hover{background:#c73b52}
+.login-box .hint{color:#666;font-size:12px;margin-top:15px}
+#mapPage{display:none;flex-direction:column;height:100vh}
+#topBar{background:#1a1a2e;padding:8px 15px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px}
+#topBar .logo{color:#fff;font-size:14px;font-weight:bold}
+#topBar select,#topBar input{padding:5px 8px;background:#16213e;color:#eee;border:1px solid #333;border-radius:4px;font-size:12px}
+#topBar button{padding:5px 10px;background:#f39c12;color:#fff;border:none;border-radius:4px;cursor:pointer;font-size:12px}
+#mapContainer{flex:1}
+#infoBar{background:#1a1a2e;padding:6px 15px;color:#aaa;font-size:11px}
+#infoBar a{color:#2ecc71;text-decoration:none;margin:0 5px}
+#detailPanel{display:none;position:fixed;right:0;top:0;bottom:0;width:360px;background:rgba(26,26,46,0.97);color:#eee;overflow-y:auto;padding:15px;z-index:999;border-left:1px solid rgba(255,255,255,0.1)}
+#detailPanel h3{font-size:15px;margin-bottom:10px}
+#detailPanel p{font-size:12px;margin:4px 0;color:#aaa}
+#detailPanel b{color:#e94560}
+#detailPanel input,#detailPanel textarea{width:100%;padding:4px 8px;background:#16213e;color:#eee;border:1px solid #444;border-radius:3px;font-size:12px;margin:2px 0}
+#detailPanel button{padding:5px 10px;margin:3px;border:none;border-radius:3px;cursor:pointer;font-size:12px;color:#fff}
+.tier-tag{display:inline-block;padding:2px 8px;border-radius:10px;font-size:11px;color:#fff}
+.t1{background:#e94560}.t2{background:#f39c12}.t3{background:#3498db}
+</style>
 </head>
 <body>
 
-<!-- 登录页面 -->
 <div id="loginPage">
   <div class="login-box">
-    <h1>🏫 上海初中学校分布地图</h1>
-    <p style="color:#aaa;">请输入访问密码</p>
-    <input type="password" id="pwdInput" placeholder="输入密码..." autofocus onkeydown="if(event.key==='Enter')doLogin()">
-    <button onclick="doLogin()">进入地图</button>
+    <h1>上海初中学校分布地图</h1>
+    <input type="password" id="pwdInput" placeholder="输入密码..." autofocus>
+    <br><button onclick="doLogin()">进入地图</button>
     <p id="loginError" style="color:#e94560;display:none;margin-top:10px;">密码错误</p>
-    <p style="color:#666;font-size:12px;margin-top:20px;">默认密码: shanghai2026</p>
+    <p class="hint">密码: shanghai2026</p>
   </div>
 </div>
 
-<!-- 地图页面 -->
-<div id="mapPage" style="display:none;">
+<div id="mapPage">
   <div id="topBar">
-    <span class="logo">🏫 上海初中分布地图 <span style="font-size:11px;color:#aaa;">(高德)</span></span>
-    <div class="toolbar-right">
-      <select id="districtFilter"><option value="">全部区域</option></select>
-      <select id="tierFilter"><option value="">全部梯队</option><option value="一梯队">一梯队</option><option value="二梯队">二梯队</option><option value="三梯队">三梯队</option></select>
-      <select id="typeFilter"><option value="">全部</option><option value="公办">公办</option><option value="民办">民办</option></select>
-      <input type="text" id="searchInput" placeholder="搜索学校..." style="width:120px;">
-      <button onclick="toggleFav()" id="favBtn">⭐ 只看收藏</button>
-      <button onclick="exportCSV()" style="background:#2ecc71;color:#fff;border:none;padding:6px 10px;border-radius:4px;cursor:pointer;font-size:12px;">📥 导出CSV</button>
-	      <button onclick="importCSV()" style="background:#3498db;color:#fff;border:none;padding:6px 10px;border-radius:4px;cursor:pointer;font-size:12px;">📤 导入CSV</button>
-    </div>
+    <span class="logo">上海初中分布地图</span>
+    <select id="districtFilter"><option value="">全部区域</option></select>
+    <select id="tierFilter"><option value="">全部梯队</option><option value="一梯队">一梯队</option><option value="二梯队">二梯队</option><option value="三梯队">三梯队</option></select>
+    <select id="typeFilter"><option value="">全部</option><option value="公办">公办</option><option value="民办">民办</option></select>
+    <input id="searchInput" placeholder="搜索..." style="width:100px">
+    <button onclick="toggleFavFilter()" id="favBtn">只看收藏</button>
+    <button onclick="exportCSV()" style="background:#2ecc71">导出CSV</button>
   </div>
   <div id="mapContainer"></div>
-  <div id="detailPanel" style="display:none;"><div id="detailContent"></div></div>
-  <div id="infoBar">
-    <span id="schoolCount"></span>
-    <span style="margin-left:15px;"><span class="dot red"></span>一梯队 <span class="dot orange"></span>二梯队 <span class="dot blue"></span>三梯队 <span class="dot gray"></span>其他</span>
-  </div>
+  <div id="infoBar"><span id="schoolCount"></span></div>
+  <div id="detailPanel"><div id="detailContent"></div></div>
 </div>
 
 <script>
