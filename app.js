@@ -1,5 +1,5 @@
-// ===== 上海初中分布地图 v13 =====
-var PASSWORD='shanghai2026',VERSION='v13',map,favIds,hiddenIds,showFavOnly,currentSchool;
+// ===== 上海初中分布地图 v14 =====
+var PASSWORD='shanghai2026',VERSION='v14',map,favIds,hiddenIds,showFavOnly,currentSchool;
 
 // ====== 登录 ======
 function doLogin(){var p=document.getElementById('pwdInput').value;if(p===PASSWORD){localStorage.setItem('auth_school_map','true');showMap();}else document.getElementById('loginError').style.display='block';}
@@ -27,7 +27,7 @@ function initMap(){
   populateFilters();
   doRender();
   // Geocoder插件已可用(测试验证)，1秒后开始转换坐标
-  setTimeout(startGeocoding,1000);
+  setTimeout(function(){if(map)startGeocoding();},1500);
 }
 
 function populateFilters(){
