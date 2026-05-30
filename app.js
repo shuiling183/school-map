@@ -3,7 +3,7 @@ var PASSWORD='shanghai2026',VERSION='v17',map,favIds,hiddenIds,showFavOnly,curre
 
 function doLogin(){if(document.getElementById('pwdInput').value===PASSWORD){localStorage.setItem('a','1');showMap();}else document.getElementById('loginError').style.display='block';}
 function showMap(){document.getElementById('loginPage').style.display='none';document.getElementById('mapPage').style.display='block';setTimeout(initMap,300);}
-if(localStorage.getItem('a')==='1'){document.getElementById('loginPage').style.display='none';document.getElementById('mapPage').style.display='block';window.onload=initMap;}
+if(localStorage.getItem('a')==='1'){document.getElementById('loginPage').style.display='none';document.getElementById('mapPage').style.display='block';setTimeout(initMap,300);}
 
 function loadEdits(){try{return JSON.parse(localStorage.getItem('ed3')||'{}');}catch(e){return{};}}
 function saveEdits(e){localStorage.setItem('ed3',JSON.stringify(e));}
