@@ -1,4 +1,4 @@
-// v34 Shanghai School Map
+// v35 Shanghai fix subway + schools School Map
 var P="shanghai2026",V="v32",map,favIds=new Set,hiddenIds=new Set,favOnly=false,cur,ps,gcActive=false,sm=[],shHidden=false,wd=null;
 
 function doLogin(){if(document.getElementById("pwdInput").value===P){localStorage.setItem("a32","1");document.getElementById("loginPage").style.display="none";document.getElementById("mapPage").style.display="flex";setTimeout(init,100);}else document.getElementById("loginError").style.display="block";}
@@ -24,7 +24,7 @@ function init(){
   sel.onchange=dr;document.getElementById("tierFilter").onchange=dr;document.getElementById("typeFilter").onchange=dr;
   document.getElementById("schoolSearch").addEventListener("input",dr);
   document.getElementById("addrSearch").addEventListener("keydown",function(e){if(e.key==="Enter")addrSearchGo();});
-  setTimeout(function(){try{var sw=new AMap.TileLayer.Subway();sw.setMap(map);}catch(e){}},800);
+  setTimeout(function(){try{if(AMap.Subway){var sw=new AMap.Subway({map:map,zoom:11,center:[121.47,31.22]});}}catch(e){console.log("Subway error:",e);}},1000);
   doRender();setTimeout(function(){if(map)startGeocoding(true);},2500);
 }
 
