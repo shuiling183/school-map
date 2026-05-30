@@ -1,6 +1,6 @@
 
-// v39 Shanghai School Map - clean, no shortcuts
-var PWD="shanghai2026",VER="v39",theMap,favorites=new Set,hiddenSchools=new Set,favOnly=false,currentDetail,placeSearch,geoCodingActive=false,searchMarkers=[],schoolsHidden=false,watchdog=null;
+// v40 Shanghai quote fix School Map - clean, no shortcuts
+var PWD="shanghai2026",VER="v40",theMap,favorites=new Set,hiddenSchools=new Set,favOnly=false,currentDetail,placeSearch,geoCodingActive=false,searchMarkers=[],schoolsHidden=false,watchdog=null;
 
 // ====== Login ======
 function doLogin(){
@@ -122,7 +122,7 @@ function renderSchools(){
   if(geoCodingActive){
     el.innerHTML='<span style="color:#f39c12">校正中...</span> 共'+list.length+'所 ('+VER+')';
   }else{
-    el.innerHTML='共 '+list.length+' 所 ('+VER+') <a href="#" onclick="startGeocoding(false)" style="color:#2ecc71">校正坐标</a> <a href="#" onclick="localStorage.removeItem('geo39');location.reload()" style="color:#e94560">清除缓存</a>';
+    el.innerHTML="共 "+list.length+" 所 ("+VER+") <a href='#' onclick='startGeocoding(false)' style='color:#2ecc71'>校正坐标</a> <a href='#' onclick="localStorage.removeItem('geo39');location.reload()" style='color:#e94560'>清除缓存</a>";
   }
 }
 
