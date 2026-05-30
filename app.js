@@ -1,5 +1,5 @@
-// v27 - normal style + coord note address search with visual markers
-var VERSION='v27',map,favIds,hiddenIds,showFavOnly,currentSchool,placeSearch,geoCodingActive=false,_searchMarkers=[],_schoolsHidden=false,_geoWatchdog=null;
+// v28 - default Gaode full rendering + coord note address search with visual markers
+var VERSION='v28',map,favIds,hiddenIds,showFavOnly,currentSchool,placeSearch,geoCodingActive=false,_searchMarkers=[],_schoolsHidden=false,_geoWatchdog=null;
 
 function doLogin(){if(document.getElementById('pwdInput').value==='shanghai2026'){localStorage.setItem('a26','1');document.getElementById('loginPage').style.display='none';document.getElementById('mapPage').style.display='flex';setTimeout(initMap,100);}else document.getElementById('loginError').style.display='block';}
 if(localStorage.getItem('a26')==='1'){document.getElementById('loginPage').style.display='none';document.getElementById('mapPage').style.display='flex';setTimeout(initMap,100);}
