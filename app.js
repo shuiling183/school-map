@@ -15,7 +15,7 @@ function centerOf(d){var m={黄浦:[121.48,31.23],徐汇:[121.44,31.19],长宁:[
 
 function init(){
   favIds=new Set(ld("f32","[]"));hiddenIds=new Set(ld("hd32","[]"));
-  map=new AMap.Map("mc",{zoom:11,center:[121.47,31.22],mapStyle:"amap://styles/macaron",viewMode:"3D"});
+  map=new AMap.Map("mapContainer",{zoom:11,center:[121.47,31.22],mapStyle:"amap://styles/macaron",viewMode:"3D"});
   if(typeof AMap!=="undefined"&&AMap.PlaceSearch)ps=new AMap.PlaceSearch({city:"上海",pageSize:12});
   var ds=[],seen={},all=allSchools();
   for(var i=0;i<all.length;i++){var d=all[i].district;if(d&&!seen[d]){ds.push(d);seen[d]=1;}}
