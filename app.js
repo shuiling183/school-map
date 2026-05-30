@@ -1,4 +1,4 @@
-// v35 Shanghai fix subway + schools School Map
+// v36 Shanghai normal style fix subway + schools School Map
 var P="shanghai2026",V="v32",map,favIds=new Set,hiddenIds=new Set,favOnly=false,cur,ps,gcActive=false,sm=[],shHidden=false,wd=null;
 
 function doLogin(){if(document.getElementById("pwdInput").value===P){localStorage.setItem("a32","1");document.getElementById("loginPage").style.display="none";document.getElementById("mapPage").style.display="flex";setTimeout(init,100);}else document.getElementById("loginError").style.display="block";}
@@ -15,7 +15,7 @@ function centerOf(d){var m={黄浦:[121.48,31.23],徐汇:[121.44,31.19],长宁:[
 
 function init(){
   favIds=new Set(ld("f32","[]"));hiddenIds=new Set(ld("hd32","[]"));
-  map=new AMap.Map("mapContainer",{zoom:11,center:[121.47,31.22],mapStyle:"amap://styles/macaron",viewMode:"3D"});
+  map=new AMap.Map("mapContainer",{zoom:13,center:[121.47,31.22],mapStyle:"amap://styles/normal",viewMode:"3D"});
   if(typeof AMap!=="undefined"&&AMap.PlaceSearch)ps=new AMap.PlaceSearch({city:"上海",pageSize:12});
   var ds=[],seen={},all=allSchools();
   for(var i=0;i<all.length;i++){var d=all[i].district;if(d&&!seen[d]){ds.push(d);seen[d]=1;}}
@@ -24,7 +24,7 @@ function init(){
   sel.onchange=dr;document.getElementById("tierFilter").onchange=dr;document.getElementById("typeFilter").onchange=dr;
   document.getElementById("schoolSearch").addEventListener("input",dr);
   document.getElementById("addrSearch").addEventListener("keydown",function(e){if(e.key==="Enter")addrSearchGo();});
-  setTimeout(function(){try{if(AMap.Subway){var sw=new AMap.Subway({map:map,zoom:11,center:[121.47,31.22]});}}catch(e){console.log("Subway error:",e);}},1000);
+  
   doRender();setTimeout(function(){if(map)startGeocoding(true);},2500);
 }
 
