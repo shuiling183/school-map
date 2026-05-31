@@ -1,17 +1,17 @@
 
-// v42 Shanghai School Map - clean, no shortcuts
-var PWD="shanghai2026",VER="v42",theMap,favorites=new Set,hiddenSchools=new Set,favOnly=false,currentDetail,placeSearch,geoCodingActive=false,searchMarkers=[],schoolsHidden=false,watchdog=null;
+// v45 Shanghai School Map - clean, no shortcuts
+function toast(msg){var d=document.createElement("div");d.textContent=msg;d.style.cssText="position:fixed;top:50px;left:50%;transform:translateX(-50%);background:#2ecc71;color:#fff;padding:10px 24px;border-radius:6px;z-index:9999;font-size:14px;font-weight:bold;box-shadow:0 4px 12px rgba(0,0,0,0.3);opacity:0;transition:opacity 0.3s";document.body.appendChild(d);setTimeout(function(){d.style.opacity="1";},50);setTimeout(function(){d.style.opacity="0";setTimeout(function(){d.remove();},300);},2000);};var PWD="shanghai2026",VER="v45",theMap,favorites=new Set,hiddenSchools=new Set,favOnly=false,currentDetail,placeSearch,geoCodingActive=false,searchMarkers=[],schoolsHidden=false,watchdog=null;
 
 // ====== Login ======
 function doLogin(){
   if(document.getElementById("pwdInput").value===PWD){
-    localStorage.setItem("auth42","1");
+    localStorage.setItem("auth44","1");
     document.getElementById("loginPage").style.display="none";
     document.getElementById("mapPage").style.display="flex";
     setTimeout(initMap,150);
   }else{document.getElementById("loginError").style.display="block";}
 }
-if(localStorage.getItem("auth42")==="1"){
+if(localStorage.getItem("auth44")==="1"){
   document.getElementById("loginPage").style.display="none";
   document.getElementById("mapPage").style.display="flex";
   setTimeout(initMap,200);
@@ -21,12 +21,12 @@ document.getElementById("pwdInput").addEventListener("keydown",function(e){if(e.
 // ====== Storage ======
 function loadData(key,def){try{return JSON.parse(localStorage.getItem(key)||def);}catch(e){return JSON.parse(def);}}
 function saveData(key,val){localStorage.setItem(key,JSON.stringify(val));}
-function getEdits(){return loadData("edits42","{}");}
-function setEdits(val){saveData("edits42",val);}
-function getGeoCache(){return loadData("geo42","{}");}
-function setGeoCache(val){saveData("geo42",val);}
-function getExtraSchools(){return loadData("extra42","[]");}
-function setExtraSchools(val){saveData("extra42",val);}
+function getEdits(){return loadData("edits44","{}");}
+function setEdits(val){saveData("edits44",val);}
+function getGeoCache(){return loadData("geo44","{}");}
+function setGeoCache(val){saveData("geo44",val);}
+function getExtraSchools(){return loadData("extra44","[]");}
+function setExtraSchools(val){saveData("extra44",val);}
 function allSchools(){return ALL_SCHOOLS.concat(getExtraSchools());}
 
 // ====== School data with edits ======
@@ -61,8 +61,8 @@ function districtCenter(d){
 
 // ====== Init ======
 function initMap(){
-  favorites=new Set(loadData("fav42","[]"));
-  hiddenSchools=new Set(loadData("hide42","[]"));
+  favorites=new Set(loadData("fav44","[]"));
+  hiddenSchools=new Set(loadData("hide44","[]"));
 
   // Create map
   theMap=new AMap.Map("mapContainer",{zoom:13,center:[121.47,31.22],mapStyle:"amap://styles/normal",viewMode:"3D"});
@@ -281,8 +281,8 @@ function editField(label,prefix,id,value){
   return '<div style="margin:2px 0;font-size:12px">'+label+': <input id="'+prefix+id+'" value="'+(value||"").replace(/"/g,"&quot;")+'" style="width:100%;padding:3px 6px;background:#16213e;color:#eee;border:1px solid #444;border-radius:3px;font-size:12px"></div>';
 }
 function closeDetail(){document.getElementById("detailPanel").style.display="none";currentDetail=null;clearCommunityOutlines();}
-function getHistory(){try{return JSON.parse(localStorage.getItem("hist42")||"[]");}catch(e){return[];}}
-function addHistory(school,changes){var h=getHistory();h.unshift({t:new Date().toLocaleString(),n:school.name,c:changes});if(h.length>200)h=h.slice(0,200);localStorage.setItem("hist42",JSON.stringify(h));}
+function getHistory(){try{return JSON.parse(localStorage.getItem("hist44")||"[]");}catch(e){return[];}}
+function addHistory(school,changes){var h=getHistory();h.unshift({t:new Date().toLocaleString(),n:school.name,c:changes});if(h.length>200)h=h.slice(0,200);localStorage.setItem("hist44",JSON.stringify(h));}
 
 // ====== Save/Delete ======
 function saveSchoolEdit(id){
@@ -304,12 +304,12 @@ function deleteSchool(id){
 }
 
 // ====== Favorite/Hide/Filter ======
-function toggleFavorite(id){if(favorites.has(id)) favorites.delete(id);else favorites.add(id);saveData("fav42",Array.from(favorites));renderSchools();if(currentDetail&&currentDetail.id===id) openDetail(currentDetail);}
-function toggleHidden(id){if(hiddenSchools.has(id)) hiddenSchools.delete(id);else hiddenSchools.add(id);saveData("hide42",Array.from(hiddenSchools));renderSchools();if(currentDetail&&currentDetail.id===id) openDetail(currentDetail);}
-function toggleFavFilter(){favOnly=!favOnly;var b=document.getElementById("favBtn");b.textContent=favOnly?"⭐ 显示全部":"⭐ 只看收藏";b.style.background=favOnly?"#e94560":"#555";renderSchools();}
+function toggleFavorite(id){if(favorites.has(id)) favorites.delete(id);else favorites.add(id);saveData("fav44",Array.from(favorites));renderSchools();if(currentDetail&&currentDetail.id===id) openDetail(currentDetail);}
+function toggleHidden(id){if(hiddenSchools.has(id)) hiddenSchools.delete(id);else hiddenSchools.add(id);saveData("hide44",Array.from(hiddenSchools));renderSchools();if(currentDetail&&currentDetail.id===id) openDetail(currentDetail);}
+function setSyncToken(){var t=prompt("请输入GitHub Token（用于跨设备同步）：",localStorage.getItem("sync_token")||"");if(t){localStorage.setItem("sync_token",t);toast("Token已保存");}};function cloudSave(){if(!localStorage.getItem("sync_token")){setSyncToken();return;}var data={edits:getEdits(),extra:getExtraSchools(),geo:getGeoCache(),fav:Array.from(favorites),hide:Array.from(hiddenSchools)};var json=JSON.stringify(data);var b64=btoa(unescape(encodeURIComponent(json)));var body=JSON.stringify({message:"sync",content:b64,sha:localStorage.getItem("sync_sha")||""});fetch("https://api.github.com/repos/shuiling183/school-map/contents/sync_data.json",{method:"PUT",headers:{Authorization:"token (localStorage.getItem("sync_token")||"")","Content-Type":"application/json"},body:body}).then(function(r){return r.json();}).then(function(r){if(r.content){localStorage.setItem("sync_sha",r.content.sha);toast("上传成功");}else if(r.message){toast("保存失败: "+r.message);}}).catch(function(e){toast("网络错误: "+e.message);});};function cloudLoad(){fetch("https://api.github.com/repos/shuiling183/school-map/contents/sync_data.json",{headers:{Authorization:"token (localStorage.getItem("sync_token")||"")"}}).then(function(r){return r.json();}).then(function(r){localStorage.setItem("sync_sha",r.sha);var data=JSON.parse(decodeURIComponent(escape(atob(r.content.replace(/s/g,"")))));if(data.edits)setEdits(data.edits);if(data.extra)setExtraSchools(data.extra);if(data.geo)setGeoCache(data.geo);if(data.fav)saveData("fav44",data.fav);if(data.hide)saveData("hide44",data.hide);alert("已从云端加载！刷新后生效");location.reload();}).catch(function(e){alert("未找到云端数据，请先在另一设备点☁存");});};function toggleFavFilter(){favOnly=!favOnly;var b=document.getElementById("favBtn");b.textContent=favOnly?"⭐ 显示全部":"⭐ 只看收藏";b.style.background=favOnly?"#e94560":"#555";renderSchools();}
 
 // ====== Export ======
-function clearGeoAndReload(){localStorage.removeItem("geo42");location.reload();}
+function clearGeoAndReload(){localStorage.removeItem("geo44");location.reload();}
 function exportCSV(){
   var edits=getEdits(),csv="区域,简称,性质,全称,中签率,入户23,入户24,入户25,对口小学,学区小区,市重率23,市重率24,市重率25,梯队,亮点,地址,自定义\n";
   var all=allSchools();
