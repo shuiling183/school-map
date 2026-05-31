@@ -56,13 +56,13 @@ body{font-family:"Microsoft YaHei",sans-serif;height:100vh;overflow:hidden}
     <span class="hint" title="用高德地理编码将学校地址转为精确经纬度">📍校正坐标</span>
     <a href="#" onclick="startGeocoding(false)" class="hint" style="color:#2ecc71">▶开始</a>
     <span class="hint" title="清除已校正的坐标缓存，恢复为区域中心近似位置（坐标重启自动保留）">🔄清除缓存</span>
-    <a href="#" onclick="localStorage.removeItem('geo39');location.reload()" class="hint" style="color:#e94560">▶执行</a>
+    <a href="#" onclick="localStorage.removeItem('geo_cache');location.reload()" class="hint" style="color:#e94560">▶执行</a>
   </div>
   <div id="detailPanel"><div id="detailContent"></div></div>
 </div>
 <script>window._AMapSecurityConfig={securityJsCode:"699e495168e30b5c0dc90291b04836d1"};</script>
 <script src="https://webapi.amap.com/maps?v=2.0&key=fd6164c500d567b965a18497e92139d9&plugin=AMap.Geocoder,AMap.PlaceSearch,AMap.DistrictSearch"></script>
-<script src="schools_data.js?v=71"></script>
-<script src="app.js?v=71"></script>
+<script src="schools_data.js?v=74"></script>
+<script src="app.js?v=74"></script>
 </body>
 </html>
