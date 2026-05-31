@@ -1,6 +1,6 @@
 
 // v71 from v61 base School Map - clean, no shortcuts
-function toast(msg){var d=document.createElement("div");d.textContent=msg;d.style.cssText="position:fixed;top:50px;left:50%;transform:translateX(-50%);background:#2ecc71;color:#fff;padding:10px 24px;border-radius:6px;z-index:9999;font-size:14px;font-weight:bold;box-shadow:0 4px 12px rgba(0,0,0,0.3);opacity:0;transition:opacity 0.3s";document.body.appendChild(d);setTimeout(function(){d.style.opacity="1";},50);setTimeout(function(){d.style.opacity="0";setTimeout(function(){d.remove();},300);},2000);};var PWD="shanghai2026",VER="v72",theMap,favorites=new Set,hiddenSchools=new Set,favOnly=false,currentDetail,placeSearch,geoCodingActive=false,searchMarkers=[],schoolsHidden=false,watchdog=null;
+function toast(msg){var d=document.createElement("div");d.textContent=msg;d.style.cssText="position:fixed;top:50px;left:50%;transform:translateX(-50%);background:#2ecc71;color:#fff;padding:10px 24px;border-radius:6px;z-index:9999;font-size:14px;font-weight:bold;box-shadow:0 4px 12px rgba(0,0,0,0.3);opacity:0;transition:opacity 0.3s";document.body.appendChild(d);setTimeout(function(){d.style.opacity="1";},50);setTimeout(function(){d.style.opacity="0";setTimeout(function(){d.remove();},300);},2000);};var PWD="shanghai2026",VER="v73",theMap,favorites=new Set,hiddenSchools=new Set,favOnly=false,currentDetail,placeSearch,geoCodingActive=false,searchMarkers=[],schoolsHidden=false,watchdog=null;
 
 // ====== Login ======
 function doLogin(){
@@ -332,7 +332,7 @@ function startGeocoding(silent){
   function startWatchdog(){
     if(watchdog) clearTimeout(watchdog);
     watchdog=setTimeout(function(){
-      if(idx===lastProgress && geoCodingActive){geoCodingActive=false;renderSchools();}
+      if(idx===lastProgress && geoCodingActive){geoCodingActive=false;document.getElementById("schoolCount").innerHTML="<span style=color:#f39c12>已校正"+ok+"所，限流暂停</span> <a href=# onclick=startGeocoding(false) style=color:#2ecc71>▶继续</a>";renderSchools();}
       else{lastProgress=idx;if(geoCodingActive) startWatchdog();}
     },15000);
   }
@@ -351,7 +351,7 @@ function startGeocoding(silent){
       }
       idx++;
       document.getElementById("schoolCount").innerHTML="<span style=color:#f39c12>校正坐标 "+idx+"/"+todo.length+" (成功"+ok+")</span>";if(idx%5===0||idx>=todo.length){setGeoCache(cache);renderSchools();}
-      setTimeout(next,180);
+      setTimeout(next,350);
     });
   }
   next();
