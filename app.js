@@ -1,6 +1,6 @@
 
 // v64 stable School Map - clean, no shortcuts
-var PWD="shanghai2026",VER="v65",theMap,favorites=new Set,hiddenSchools=new Set,favOnly=false,currentDetail,placeSearch,geoCodingActive=false,searchMarkers=[],schoolsHidden=false,watchdog=null;
+var PWD="shanghai2026",VER="v66",theMap,favorites=new Set,hiddenSchools=new Set,favOnly=false,currentDetail,placeSearch,geoCodingActive=false,searchMarkers=[],schoolsHidden=false,watchdog=null;
 
 // ====== Login ======
 function doLogin(){
@@ -102,7 +102,7 @@ function renderSchools(){
   var dFilter=document.getElementById("districtFilter").value;
   var tFilter=document.getElementById("tierFilter").value;
   var pFilter=document.getElementById("typeFilter").value;
-  var keyword=(document.getElementById("schoolSearch").value||"").toLowerCase();
+  var ss2=document.getElementById("schoolSearch");var keyword=(ss2?(ss2.value||""):"").toLowerCase();
 
   var all=allSchools(), list=[];
   for(var i=0;i<all.length;i++){
