@@ -1,6 +1,6 @@
 
 // v64 stable School Map - clean, no shortcuts
-var PWD="shanghai2026",VER="v64",theMap,favorites=new Set,hiddenSchools=new Set,favOnly=false,currentDetail,placeSearch,geoCodingActive=false,searchMarkers=[],schoolsHidden=false,watchdog=null;
+var PWD="shanghai2026",VER="v65",theMap,favorites=new Set,hiddenSchools=new Set,favOnly=false,currentDetail,placeSearch,geoCodingActive=false,searchMarkers=[],schoolsHidden=false,watchdog=null;
 
 // ====== Login ======
 function doLogin(){
@@ -84,7 +84,7 @@ function initMap(){
   sel.onchange=renderSchools;
   document.getElementById("tierFilter").onchange=renderSchools;
   document.getElementById("typeFilter").onchange=renderSchools;
-  document.getElementById("schoolSearch").addEventListener("input",renderSchools);
+  var ss=document.getElementById("schoolSearch");if(ss)ss.addEventListener("input",renderSchools);
   document.getElementById("addrSearch").addEventListener("keydown",function(e){if(e.key==="Enter")searchAddress();});
 
   // Render NOW
