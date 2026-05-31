@@ -1,6 +1,6 @@
 
 // v61 all fixes School Map - clean, no shortcuts
-function toast(msg){var d=document.createElement("div");d.textContent=msg;d.style.cssText="position:fixed;top:50px;left:50%;transform:translateX(-50%);background:#2ecc71;color:#fff;padding:10px 24px;border-radius:6px;z-index:9999;font-size:14px;font-weight:bold;box-shadow:0 4px 12px rgba(0,0,0,0.3);opacity:0;transition:opacity 0.3s";document.body.appendChild(d);setTimeout(function(){d.style.opacity="1";},50);setTimeout(function(){d.style.opacity="0";setTimeout(function(){d.remove();},300);},2000);};var PWD="shanghai2026",VER="v61",theMap,favorites=new Set,hiddenSchools=new Set,favOnly=false,currentDetail,placeSearch,geoCodingActive=false,searchMarkers=[],schoolsHidden=false,watchdog=null;
+function toast(msg){var d=document.createElement("div");d.textContent=msg;d.style.cssText="position:fixed;top:50px;left:50%;transform:translateX(-50%);background:#2ecc71;color:#fff;padding:10px 24px;border-radius:6px;z-index:9999;font-size:14px;font-weight:bold;box-shadow:0 4px 12px rgba(0,0,0,0.3);opacity:0;transition:opacity 0.3s";document.body.appendChild(d);setTimeout(function(){d.style.opacity="1";},50);setTimeout(function(){d.style.opacity="0";setTimeout(function(){d.remove();},300);},2000);};var PWD="shanghai2026",VER="v62",theMap,favorites=new Set,hiddenSchools=new Set,favOnly=false,currentDetail,placeSearch,geoCodingActive=false,searchMarkers=[],schoolsHidden=false,watchdog=null;
 
 // ====== Login ======
 function doLogin(){
@@ -162,11 +162,11 @@ function searchMatch(school,keyword){
 
 // ====== Address Search ======
 function clearSearchMarkers(){for(var i=0;i<searchMarkers.length;i++) searchMarkers[i].setMap(null);searchMarkers=[];}
-function cancelAddrSearch(){schoolsHidden=false;clearSearchMarkers();renderSchools();}
+function showSchoolMatches(list){schoolsHidden=true;theMap.clearMap();clearSearchMarkers();for(var i=0;i<list.length;i++){(function(s,idx){var c=getCoord(s);if(!c)return;var mk=new AMap.CircleMarker({center:[c.lng,c.lat],radius:10,fillColor:"#e94560",fillOpacity:0.9,strokeColor:"#fff",strokeWeight:2});mk.setMap(theMap);searchMarkers.push(mk);mk.on("click",function(){schoolsHidden=false;clearSearchMarkers();renderSchools();theMap.setCenter([c.lng,c.lat]);theMap.setZoom(16);openDetail(s);});var lb=new AMap.Text({text:(idx+1)+"."+s.name,position:[c.lng,c.lat],offset:new AMap.Pixel(15,-8),style:{"font-size":"12px",color:"#e94560","font-weight":"bold",background:"rgba(255,255,255,0.9)",padding:"2px 6px","border-radius":"3px"},zIndex:201});lb.setMap(theMap);searchMarkers.push(lb);lb.on("click",function(){schoolsHidden=false;clearSearchMarkers();renderSchools();theMap.setCenter([c.lng,c.lat]);theMap.setZoom(16);openDetail(s);});})(list[i],i);}var bs=new AMap.Bounds();for(var i=0;i<list.length;i++){var c2=getCoord(list[i]);if(c2)bs.extend([c2.lng,c2.lat]);}theMap.setBounds(bs,false,[60,60,60,60]);document.getElementById("schoolCount").innerHTML="找到 <b>"+list.length+"</b> 所学校 | <a href=# onclick=cancelAddrSearch() style=color:#e74c3c>取消</a>";};function cancelAddrSearch(){schoolsHidden=false;clearSearchMarkers();renderSchools();}
 
 function searchAddress(){
   var kw=document.getElementById("addrSearch").value.trim();
-  if(!kw||!placeSearch){alert("请输入地址");return;}
+  if(!kw||!placeSearch){alert("请输入地址");return;}var schoolMatch=[];var all=allSchools();for(var si=0;si<all.length;si++){if(matchSearch(all[si],kw))schoolMatch.push(all[si]);}if(schoolMatch.length>0){showSchoolMatches(schoolMatch);return;}
   placeSearch.search(kw,function(status,result){
     if(status==="complete"&&result.poiList&&result.poiList.pois&&result.poiList.pois.length>0){
       schoolsHidden=true;theMap.clearMap();clearSearchMarkers();
