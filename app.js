@@ -1,6 +1,6 @@
 
 // v71 from v61 base School Map - clean, no shortcuts
-function toast(msg){var d=document.createElement("div");d.textContent=msg;d.style.cssText="position:fixed;top:50px;left:50%;transform:translateX(-50%);background:#2ecc71;color:#fff;padding:10px 24px;border-radius:6px;z-index:9999;font-size:14px;font-weight:bold;box-shadow:0 4px 12px rgba(0,0,0,0.3);opacity:0;transition:opacity 0.3s";document.body.appendChild(d);setTimeout(function(){d.style.opacity="1";},50);setTimeout(function(){d.style.opacity="0";setTimeout(function(){d.remove();},300);},2000);};var PWD="shanghai2026",VER="v71",theMap,favorites=new Set,hiddenSchools=new Set,favOnly=false,currentDetail,placeSearch,geoCodingActive=false,searchMarkers=[],schoolsHidden=false,watchdog=null;
+function toast(msg){var d=document.createElement("div");d.textContent=msg;d.style.cssText="position:fixed;top:50px;left:50%;transform:translateX(-50%);background:#2ecc71;color:#fff;padding:10px 24px;border-radius:6px;z-index:9999;font-size:14px;font-weight:bold;box-shadow:0 4px 12px rgba(0,0,0,0.3);opacity:0;transition:opacity 0.3s";document.body.appendChild(d);setTimeout(function(){d.style.opacity="1";},50);setTimeout(function(){d.style.opacity="0";setTimeout(function(){d.remove();},300);},2000);};var PWD="shanghai2026",VER="v72",theMap,favorites=new Set,hiddenSchools=new Set,favOnly=false,currentDetail,placeSearch,geoCodingActive=false,searchMarkers=[],schoolsHidden=false,watchdog=null;
 
 // ====== Login ======
 function doLogin(){
@@ -326,7 +326,7 @@ function startGeocoding(silent){
   for(var i=0;i<all.length;i++){var s=all[i];if(s.address&&!cache[s.id]) todo.push(s);}
   if(todo.length===0){if(!silent) alert("已全部定位");return;}
   if(typeof AMap=="undefined"||!AMap.Geocoder){if(!silent) alert("Geocoder未加载");return;}
-  geoCodingActive=true;var lastProgress=0;renderSchools();
+  geoCodingActive=true;var lastProgress=0;renderSchools();document.getElementById("schoolCount").innerHTML="<span style=color:#f39c12>校正坐标中 0/"+todo.length+"</span>";
   var geocoder=new AMap.Geocoder({city:"上海"}),idx=0,ok=0;
 
   function startWatchdog(){
@@ -350,7 +350,7 @@ function startGeocoding(silent){
         cache[currentId]={lng:loc.lng,lat:loc.lat};ok++;
       }
       idx++;
-      if(idx%5===0||idx>=todo.length){setGeoCache(cache);renderSchools();}
+      document.getElementById("schoolCount").innerHTML="<span style=color:#f39c12>校正坐标 "+idx+"/"+todo.length+" (成功"+ok+")</span>";if(idx%5===0||idx>=todo.length){setGeoCache(cache);renderSchools();}
       setTimeout(next,180);
     });
   }
