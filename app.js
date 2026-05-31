@@ -1,6 +1,6 @@
 
 // v71 from v61 base School Map - clean, no shortcuts
-function toast(msg){var d=document.createElement("div");d.textContent=msg;d.style.cssText="position:fixed;top:50px;left:50%;transform:translateX(-50%);background:#2ecc71;color:#fff;padding:10px 24px;border-radius:6px;z-index:9999;font-size:14px;font-weight:bold;box-shadow:0 4px 12px rgba(0,0,0,0.3);opacity:0;transition:opacity 0.3s";document.body.appendChild(d);setTimeout(function(){d.style.opacity="1";},50);setTimeout(function(){d.style.opacity="0";setTimeout(function(){d.remove();},300);},2000);};var PWD="shanghai2026",VER="v73",theMap,favorites=new Set,hiddenSchools=new Set,favOnly=false,currentDetail,placeSearch,geoCodingActive=false,searchMarkers=[],schoolsHidden=false,watchdog=null;
+function toast(msg){var d=document.createElement("div");d.textContent=msg;d.style.cssText="position:fixed;top:50px;left:50%;transform:translateX(-50%);background:#2ecc71;color:#fff;padding:10px 24px;border-radius:6px;z-index:9999;font-size:14px;font-weight:bold;box-shadow:0 4px 12px rgba(0,0,0,0.3);opacity:0;transition:opacity 0.3s";document.body.appendChild(d);setTimeout(function(){d.style.opacity="1";},50);setTimeout(function(){d.style.opacity="0";setTimeout(function(){d.remove();},300);},2000);};var PWD="shanghai2026",VER="v74",theMap,favorites=new Set,hiddenSchools=new Set,favOnly=false,currentDetail,placeSearch,geoCodingActive=false,searchMarkers=[],schoolsHidden=false,watchdog=null;
 
 // ====== Login ======
 function doLogin(){
