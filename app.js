@@ -84,7 +84,7 @@ function initMap(){
   sel.onchange=renderSchools;
   document.getElementById("tierFilter").onchange=renderSchools;
   document.getElementById("typeFilter").onchange=renderSchools;
-  document.getElementById("schoolSearch").addEventListener("input",function(){var kw=document.getElementById("schoolSearch").value.trim();if(!kw)renderSchools();});
+  if(!kw)renderSchools();});
   document.getElementById("addrSearch").addEventListener("keydown",function(e){if(e.key==="Enter")searchAddress();});
 
   // Render NOW
