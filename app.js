@@ -1,6 +1,6 @@
 
 // v71 from v61 base School Map - clean, no shortcuts
-function toast(msg){var d=document.createElement("div");d.textContent=msg;d.style.cssText="position:fixed;top:50px;left:50%;transform:translateX(-50%);background:#2ecc71;color:#fff;padding:10px 24px;border-radius:6px;z-index:9999;font-size:14px;font-weight:bold;box-shadow:0 4px 12px rgba(0,0,0,0.3);opacity:0;transition:opacity 0.3s";document.body.appendChild(d);setTimeout(function(){d.style.opacity="1";},50);setTimeout(function(){d.style.opacity="0";setTimeout(function(){d.remove();},300);},2000);};var PWD="shanghai2026",VER="v78",theMap,favorites=new Set,hiddenSchools=new Set,favOnly=false,currentDetail,placeSearch,geoCodingActive=false,searchMarkers=[],schoolsHidden=false,watchdog=null;
+function toast(msg){var d=document.createElement("div");d.textContent=msg;d.style.cssText="position:fixed;top:50px;left:50%;transform:translateX(-50%);background:#2ecc71;color:#fff;padding:10px 24px;border-radius:6px;z-index:9999;font-size:14px;font-weight:bold;box-shadow:0 4px 12px rgba(0,0,0,0.3);opacity:0;transition:opacity 0.3s";document.body.appendChild(d);setTimeout(function(){d.style.opacity="1";},50);setTimeout(function(){d.style.opacity="0";setTimeout(function(){d.remove();},300);},2000);};var PWD="shanghai2026",VER="v79",theMap,favorites=new Set,hiddenSchools=new Set,favOnly=false,currentDetail,placeSearch,geoCodingActive=false,searchMarkers=[],schoolsHidden=false,watchdog=null;
 
 // ====== Login ======
 function doLogin(){
@@ -308,19 +308,7 @@ function setSyncToken(){localStorage.setItem("sync_token",["gh","p_5","1OHJRcZBA
 
 // ====== Export ======
 function clearGeoAndReload(){localStorage.removeItem("geo71");location.reload();}
-function exportCSV(){
-  var edits=getEdits(),csv="区域,简称,性质,全称,中签率,入户23,入户24,入户25,对口小学,学区小区,市重率23,市重率24,市重率25,梯队,亮点,地址,自定义\\n";
-  var all=allSchools();
-  for(var i=0;i<all.length;i++){
-    var s=all[i],d=getSchoolData(s);
-    csv+=['"'+s.district+'"','"'+s.name+'"','"'+s.type+'"','"'+(s.fullName||"")+'"','"'+d.lottery+'"','"'+(s.residency23||"")+'"','"'+(s.residency24||"")+'"','"'+d.res25+'"','"'+d.feeder+'"','"'+d.communities+'"','"'+d.rate23+'"','"'+d.rate24+'"','"'+d.rate25+'"','"'+d.tier+'"','"'+d.highlights+'"','"'+(s.address||"")+'"','"'+(s._extra?"是":"")+'"'].join(",")+"\\n";
-  }
-  var b=new Blob(["﻿"+csv],{type:"text/csv;charset=utf-8"});
-  var a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="初中排名_"+new Date().toISOString().slice(0,10)+".csv";a.click();
-}
-
-// ====== Geocoding ======
-function startGeocoding(silent){
+function exportCSV(){var RN=String.fromCharCode(13,10);var edits=getEdits(),csv="区域,简称,性质,全称,中签率,入户23,入户24,入户25,对口小学,学区小区,市重率23,市重率24,市重率25,梯队,亮点,地址,自定义"+RN;var all=allSchools();for(var i=0;i<all.length;i++){var s=all[i],d=getSchoolData(s);csv+=['"'+s.district+'"','"'+s.name+'"','"'+s.type+'"','"'+(s.fullName||"")+'"','"'+d.lottery+'"','"'+(s.residency23||"")+'"','"'+(s.residency24||"")+'"','"'+d.res25+'"','"'+d.feeder+'"','"'+d.communities+'"','"'+d.rate23+'"','"'+d.rate24+'"','"'+d.rate25+'"','"'+d.tier+'"','"'+d.highlights+'"','"'+(s.address||"")+'"','"'+(s._extra?"是":"")+'"'].join(",")+RN;}var b=new Blob(["﻿"+csv],{type:"text/csv;charset=utf-8"});var a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="初中排名_"+new Date().toISOString().slice(0,10)+".csv";a.click();}function startGeocoding(silent){
   if(geoCodingActive) return;
   var cache=getGeoCache(),todo=[],all=allSchools();
   for(var i=0;i<all.length;i++){var s=all[i];if(s.address&&!cache[s.id]) todo.push(s);}
