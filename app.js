@@ -1,6 +1,6 @@
 
 // v67 v39+features School Map - clean, no shortcuts
-function toast(m){var d=document.createElement("div");d.textContent=m;d.style.cssText="position:fixed;top:50px;left:50%;transform:translateX(-50%);background:#2ecc71;color:#fff;padding:10px 24px;border-radius:6px;z-index:9999;font-size:14px;font-weight:bold;box-shadow:0 4px 12px rgba(0,0,0,0.3);opacity:0;transition:opacity 0.3s";document.body.appendChild(d);setTimeout(function(){d.style.opacity="1";},50);setTimeout(function(){d.style.opacity="0";setTimeout(function(){d.remove();},300);},2000);};var PWD="shanghai2026",VER="v68",theMap,favorites=new Set,hiddenSchools=new Set,favOnly=false,currentDetail,placeSearch,geoCodingActive=false,searchMarkers=[],schoolsHidden=false,watchdog=null;
+function toast(m){var d=document.createElement("div");d.textContent=m;d.style.cssText="position:fixed;top:50px;left:50%;transform:translateX(-50%);background:#2ecc71;color:#fff;padding:10px 24px;border-radius:6px;z-index:9999;font-size:14px;font-weight:bold;box-shadow:0 4px 12px rgba(0,0,0,0.3);opacity:0;transition:opacity 0.3s";document.body.appendChild(d);setTimeout(function(){d.style.opacity="1";},50);setTimeout(function(){d.style.opacity="0";setTimeout(function(){d.remove();},300);},2000);};var PWD="shanghai2026",VER="v69",theMap,favorites=new Set,hiddenSchools=new Set,favOnly=false,currentDetail,placeSearch,geoCodingActive=false,searchMarkers=[],schoolsHidden=false,watchdog=null;
 
 // ====== Login ======
 function doLogin(){
@@ -84,7 +84,7 @@ function initMap(){
   sel.onchange=renderSchools;
   document.getElementById("tierFilter").onchange=renderSchools;
   document.getElementById("typeFilter").onchange=renderSchools;
-  document.getElementById("schoolSearch").addEventListener("input",renderSchools);
+  var ss=document.getElementById("schoolSearch");if(ss)ss.addEventListener("input",renderSchools);
   document.getElementById("addrSearch").addEventListener("keydown",function(e){if(e.key==="Enter")searchAddress();});
 
   // Render NOW
@@ -102,7 +102,7 @@ function renderSchools(){
   var dFilter=document.getElementById("districtFilter").value;
   var tFilter=document.getElementById("tierFilter").value;
   var pFilter=document.getElementById("typeFilter").value;
-  var keyword=(document.getElementById("schoolSearch").value||"").toLowerCase();
+  var ssEl=document.getElementById("schoolSearch");var keyword=(ssEl?(ssEl.value||""):"").toLowerCase();
 
   var all=allSchools(), list=[];
   for(var i=0;i<all.length;i++){
@@ -160,7 +160,7 @@ function searchMatch(school,keyword){
   return false;
 }
 
-function clearSchoolSearch(){document.getElementById("schoolSearch").value="";renderSchools();}
+function clearSchoolSearch(){var s=document.getElementById("schoolSearch");if(s)s.value="";renderSchools();}
 
 // ====== Address Search ======
 function clearSearchMarkers(){for(var i=0;i<searchMarkers.length;i++) searchMarkers[i].setMap(null);searchMarkers=[];}
