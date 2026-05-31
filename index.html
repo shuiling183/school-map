@@ -42,7 +42,7 @@ body{font-family:"Microsoft YaHei",sans-serif;height:100vh;overflow:hidden}
     <select id="typeFilter"><option value="">全部</option><option value="公办">公办</option><option value="民办">民办</option></select>
     <span class="sep">|</span>
     
-    <input id="addrSearch" placeholder="📍 搜索地址..." title="在高德地图中搜索任意地址"><button onclick="cancelAddrSearch();document.getElementById('addrSearch').value='';renderSchools();" style="background:#e74c3c;padding:5px 8px;font-size:11px" title="清除地址搜索">✕</button>
+    <input id="schoolSearch" placeholder="搜索学校" style="display:none"><input id="addrSearch" placeholder="📍 搜索地址..." title="在高德地图中搜索任意地址"><button onclick="cancelAddrSearch();document.getElementById('addrSearch').value='';renderSchools();" style="background:#e74c3c;padding:5px 8px;font-size:11px" title="清除地址搜索">✕</button>
     
     <button onclick="searchAddress()" style="background:#9b59b6" title="在高德地图搜索地址">搜地址</button>
     <span class="sep">|</span>
@@ -62,7 +62,7 @@ body{font-family:"Microsoft YaHei",sans-serif;height:100vh;overflow:hidden}
 </div>
 <script>window._AMapSecurityConfig={securityJsCode:"699e495168e30b5c0dc90291b04836d1"};</script>
 <script src="https://webapi.amap.com/maps?v=2.0&key=fd6164c500d567b965a18497e92139d9&plugin=AMap.Geocoder,AMap.PlaceSearch,AMap.DistrictSearch"></script>
-<script src="schools_data.js?v=67"></script>
-<script src="app.js?v=67"></script>
+<script src="schools_data.js?v=69"></script>
+<script src="app.js?v=69"></script>
 </body>
 </html>
